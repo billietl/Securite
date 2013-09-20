@@ -17,21 +17,26 @@ le bandit ne puisse pas se faire passer pour le vendeur
 Banque connais :
 banque.Kpub
 banque.kpriv
-vendeur.Kpub
 vendeur.rib
-client.Kpub
 client.rib
 
 Vendeur connais :
 banque.Kpub
 vendeur.rib
+S(vendeur.rib, banque.Kpriv)
 vendeur.Kpub
 vendeur.Kpriv
 
 Client connais : 
 banque.Kpub
 client.rib
+S(client.rib, banque.Kpriv)
 client.Kpub
 client.Kpriv
 
 
+établissement de la facture :
+vendeur.facture + C(vendeur.rib, client.Kpub) + S(vendeur.rib, Banque.Kpriv) + S(vendeur.Kpriv)
+
+établissement de l'ordre de paiement :
+client.paiement + C(client.rib, vendeur.Kpub) + S(client.rib, banque.Kpriv) + vendeur.facture + S(client.Kpriv)
