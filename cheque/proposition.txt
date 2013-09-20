@@ -42,10 +42,10 @@ client.Kpriv
 vendeur.facture + C(vendeur.rib, client.Kpub) + S(vendeur.rib+vendeur.Kpub, Banque.Kpriv) + S(vendeur.Kpriv)
 
 établissement de l'ordre de paiement :
-client.paiement + C(client.rib, vendeur.Kpub) + S(client.rib+client.Kpub, banque.Kpriv) + S(client.Kpriv)
+C(client.paiement, client.Kpriv) + C(client.rib, vendeur.Kpub) + S(client.rib+client.Kpub, banque.Kpriv) + S(client.Kpriv)
 
 
 Eve veut intercepter le paiement de Alice pour Bob : impossible sans activer l'alarme
 Bob veut payer Eve pour une facture virtuelle : PEBKAC!!!
 Eve veut payer Alice avec le rib de Bob : impossible sans activer l'alarme
-Eve est vendeuse et veut faire gonfler la facture après paiement : OK
+Eve est vendeuse et veut faire gonfler la facture après paiement : impossible sans activer l'alarme
