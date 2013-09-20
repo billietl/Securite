@@ -1,0 +1,37 @@
+Soient :
+A.Kpub la clé publique d'alice
+B.Kpriv la clé privée de Bob
+C.rib la relevé d'identité banquaire de Charlie
+D.facture une facture emise pas Dominique
+E.paiement l'ordre de paiement venant d'Eve
+S(X.rib, Y.Kpub) le rib de Xavier signé par Yoann
+C(F.rib, F.Kpriv) le rib de Frederic chiffré avec la clé privée de Frederic
+
+Il faut que :
+le vendeur puisse authentifier le client
+le client puisse authentifier le vendeur
+le client ne puisse nier le paiement
+le bandit ne puisse pas se faire passer pour le client
+le bandit ne puisse pas se faire passer pour le vendeur
+
+Banque connais :
+banque.Kpub
+banque.kpriv
+vendeur.Kpub
+vendeur.rib
+client.Kpub
+client.rib
+
+Vendeur connais :
+banque.Kpub
+vendeur.rib
+vendeur.Kpub
+vendeur.Kpriv
+
+Client connais : 
+banque.Kpub
+client.rib
+client.Kpub
+client.Kpriv
+
+

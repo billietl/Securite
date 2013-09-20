@@ -20,4 +20,4 @@ Banque peut être une banque! (merci banque).
 
 Faire document sur la solution proposé.
 
-En quoi evite client ou vendeur ce trompe.
+En quoi evite client ou vendeur se trompe.
