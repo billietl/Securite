@@ -5,6 +5,7 @@ C.rib la relevé d'identité banquaire de Charlie
 D.facture une facture emise pas Dominique
 E.paiement l'ordre de paiement venant d'Eve
 S(X.rib, Y.Kpub) le rib de Xavier signé par Yoann
+S(K.Kpub) la signature du message avec la clé publique de Kevin
 C(F.rib, F.Kpriv) le rib de Frederic chiffré avec la clé privée de Frederic
 
 Il faut que :
@@ -18,19 +19,21 @@ Banque connais :
 banque.Kpub
 banque.kpriv
 vendeur.rib
+vendeur.Kpub
 client.rib
+client.Kpub
 
 Vendeur connais :
 banque.Kpub
 vendeur.rib
-S(vendeur.rib, banque.Kpriv)
+S(vendeur.rib+vendeur.Kpub, banque.Kpriv) == certificat de la banque
 vendeur.Kpub
 vendeur.Kpriv
 
 Client connais : 
 banque.Kpub
 client.rib
-S(client.rib, banque.Kpriv)
+S(client.rib+client.Kpub, banque.Kpriv) == certificat de la banque
 client.Kpub
 client.Kpriv
 
@@ -39,9 +42,10 @@ client.Kpriv
 vendeur.facture + C(vendeur.rib, client.Kpub) + S(vendeur.rib+vendeur.Kpub, Banque.Kpriv) + S(vendeur.Kpriv)
 
 établissement de l'ordre de paiement :
-client.paiement + C(client.rib, vendeur.Kpub) + S(client.rib+client.Kpub, banque.Kpriv) + vendeur.facture + S(client.Kpriv)
+client.paiement + C(client.rib, vendeur.Kpub) + S(client.rib+client.Kpub, banque.Kpriv) + S(client.Kpriv)
 
 
 Eve veut intercepter le paiement de Alice pour Bob : impossible sans activer l'alarme
 Bob veut payer Eve pour une facture virtuelle : PEBKAC!!!
 Eve veut payer Alice avec le rib de Bob : impossible sans activer l'alarme
+Eve est vendeuse et veut faire gonfler la facture après paiement : OK
