@@ -100,6 +100,7 @@ Pour payer Victor, Charles doit lui transmettre :
 Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)
 
 \section{Sceraii d'attaque par\'ees}
+
 \subsection{Boris veut intercepter le ch\'eque de Charles}
 Borris ne peut pas remplacer C(vd.RIB+montant+transactionID, clt.Kpriv) pour cr\'editer son propre compte, la banque refusera le cheque, car la partie remlac\'ee n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e de Borris.
 
@@ -108,8 +109,14 @@ Borris ne peut pas s'en servir chez Victor, Victor lira en d'\'echiffrant C(vd.R
 \subsection{Victor veur encaisser plusieurs fois le ch\`eque de Charles}
 
 \subsection{Victor veut augmenter le montant du ch\`eque}
+Lors de la cr\'eation du ch\`eque, Charles chiffre les informations concernant le destinataire (et notemment le montant) avec sa cl\'e priv\'ee.
+Sachant que la cl\'e publique correspondante est chiffr\'ee par la banque dans le certificat, si Victor veut alt\'erer le montant, il faudra qu'il re-chiffre cette partie du ch\`eque avec la cl\'e priv\'ee correspondante (celle de Charles).
+Information que seul Charles d\'etiens (en principe).
 
 \subsection{Charles veut r\'eutilser un ch\`eque d\'ej\`a utilis\'e}
+Lors de l'\'emission de la facture, Victor g\'en\`ere un num\'ero de transaction unique.
+Si Charles veut utiliser un ch\`eque d\'ej\`a utilis\'e, il devra fatalement y apposer un num\'ero de transaction qui a servi pour une autre facture.
+Or, si le num\'ero de transaction du ch\`eque ne correspond pas avec celui de la facture, le paiement sera rejet\'e directement par Victor.
 
 
 
