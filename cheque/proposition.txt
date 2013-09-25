@@ -52,7 +52,8 @@ Eve est vendeuse et veut faire gonfler la facture après paiement : impossible s
 
 Deuxieme solution :
 
-facture = vd.Kpub+C(vd.RIB+montant, vd.Kpriv)+S(vd.RIB+vd.Kpub, bq.Kpriv)+S(vd.Kpriv)
-chèque = clt.Kpub+C(clt.RIB+vd.RIB+montant, clt.Kpriv)+S(clt.RIB+clt.Kpub, bq.Kpriv)+S(clt.Kpriv)
+facture = vd.RIB+montant+transactionID
+
+chèque = C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)
 
 C'est beaucoup plus simple.
