@@ -46,6 +46,13 @@ C(client.paiement, client.Kpriv) + C(client.rib, vendeur.Kpub) + S(client.rib+cl
 
 
 Eve veut intercepter le paiement de Alice pour Bob : impossible sans activer l'alarme
-Bob veut payer Eve pour une facture virtuelle : PEBKAC!!!
 Eve veut payer Alice avec le rib de Bob : impossible sans activer l'alarme
 Eve est vendeuse et veut faire gonfler la facture après paiement : impossible sans activer l'alarme
+
+
+Deuxieme solution :
+
+facture = vd.Kpub+C(vd.RIB+montant, vd.Kpriv)+S(vd.RIB+vd.Kpub, bq.Kpriv)+S(vd.Kpriv)
+chèque = clt.Kpub+C(clt.RIB+vd.RIB+montant, clt.Kpriv)+S(clt.RIB+clt.Kpub, bq.Kpriv)+S(clt.Kpriv)
+
+C'est beaucoup plus simple.
