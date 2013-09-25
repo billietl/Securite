@@ -89,7 +89,7 @@ Dans un premier temps, lorsque Victor annonce le montant \`a Charles, il lui tra
 \item le montant
 \item un num\'ero de transaction unique pour le vendeur
 \end{itemize}
-Le message de Victor vers Charles aura donc la forme :\\V.rib+montant+transactionID
+Le message de Victor vers Charles aura donc la forme :\\\textbf{V.rib+montant+transactionID}
 
 
 Pour payer Victor, Charles doit lui transmettre :
@@ -99,17 +99,16 @@ Pour payer Victor, Charles doit lui transmettre :
 \item le num\'ero de transaction
 \item C(C.rib+c.Kpub, Bq.Kpriv)
 \end{itemize}
-Donc, le ch\`eque aura la forme : \\C(V.RIB+montant+transactionID, C.Kpriv)+C(C.RIB+C.Kpub, Bq.Kpriv)
+Donc, le ch\`eque aura la forme : \\\textbf{C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)}
 \subsection{Tests r\'ealis\'es}
-Lorsque Victor re\c coit un ch\`eque, il d\'echiffre \\C(C.RIB+C.Kpub, Bq.Kpriv)\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
-Il utilise Kpub pour d\'echiffrer \\C(V.RIB+montant+transactionID, C.Kpriv)\\puis compare V.RIB, montant et transactionID avec celui qu'il a \'emit \`a Charles.
+Lorsque Victor re\c coit un ch\`eque, il d\'echiffre \\\textbf{C(C.RIB+C.Kpub, Bq.Kpriv)}\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
+Il utilise Kpub pour d\'echiffrer \\\textbf{C(V.RIB+montant+transactionID, C.Kpriv)}\\puis compare V.RIB, montant et transactionID avec celui qu'il a \'emit \`a Charles.
 Si les informations sont coh\'erentes, la ch\`eque est valide.
 
 
-Lorsque la banque re\c coit un ch\`eque, il d\'echiffre \\C(C.RIB+C.Kpub, Bq.Kpriv)\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
-Il utilise Kpub pour d\'echiffrer \\C(V.RIB+montant+transactionID, C.Kpriv)\\puis v\'erifie si le couple V.RIB, transactionID n'a pas d\'ej\`a \'et\'e utilis\'e dans un autre ch\`eque.
+Lorsque la banque re\c coit un ch\`eque, il d\'echiffre \\\textbf{C(C.RIB+C.Kpub, Bq.Kpriv)}\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
+Il utilise Kpub pour d\'echiffrer \\\textbf{C(V.RIB+montant+transactionID, C.Kpriv)}\\puis v\'erifie si le couple V.RIB, transactionID n'a pas d\'ej\`a \'et\'e utilis\'e dans un autre ch\`eque.
 S'il n'y a pas de probl\`emes, il peut debiter \textit{montant} du compte C.RIB et cr\'editer cette somme sur le compte V.RIB.
-
 
 \section{Sceraii d'attaque par\'ees}
 
