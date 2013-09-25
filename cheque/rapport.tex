@@ -1,14 +1,10 @@
-\documentclass[oneside,12pt]{article}
+\documentclass[oneside,1àpt]{article}
 \usepackage[latin1]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[francais]{layout}
 \usepackage[OT1]{fontenc}
-\usepackage{fancybox}
-\usepackage{ulem}
-\usepackage{graphicx}
 \usepackage{listings}
 \usepackage{cite}
-\usepackage{url}
 \usepackage{textcomp}
 
 % RÃ©glages du document
@@ -26,7 +22,27 @@
 Le but de l'exercice est d'imaginer un syst\`eme de ch\`eque num\'erique permettant \`a un client de payer un vendeur.
 
 
-\section{}
+\section{Conventions de nommage}
+Soient :
+\begin{itemize}
+\item A.Kpub la clé publique d'Alexandre.
+\item B.Kpriv la clé privée de Benjamin.
+\item C.rib la relevé d'identité banquaire de Charlie.
+\item D.facture une facture emise pas Dominique.
+\item E.paiement l'ordre de paiement venant d'Edouard.
+\item S(F.rib, G.Kpub) le rib de Fr\'ederic signé par Gilles.
+\item S(H.Kpub) la signature du message courant avec la clé publique de Henri.
+\item C(I.rib, J.Kpriv) le rib de Ivan chiffré avec la clé privée de John.
+\end{itemize}
+
+\section{Analyse et pr\'esuppositions}
+\'Etant donn\'e que le client et le vendeur payent ici avec un compte en banque, on suppose qu'ils y ont au pr\'ealable ouvert un compte. Nous supposons ici que :
+\begin{itemize}
+\item Le client / le vendeur \`a d\'ej\`a g\'en\'er\'e sa paire de cl\'e publique/priv\'ee.
+\item La banque fournis a chaque personne ouvrant un compte un certain nombre d'informations.
+\end{itemize}
+
+
 
 \section{Proposition de solution}
 
