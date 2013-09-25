@@ -1,14 +1,10 @@
-\documentclass[oneside,12pt]{article}
+\documentclass[oneside,1àpt]{article}
 \usepackage[latin1]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[francais]{layout}
 \usepackage[OT1]{fontenc}
-\usepackage{fancybox}
-\usepackage{ulem}
-\usepackage{graphicx}
 \usepackage{listings}
 \usepackage{cite}
-\usepackage{url}
 \usepackage{textcomp}
 
 % RÃ©glages du document
@@ -46,9 +42,62 @@ Attention:
   \item Le vendeur peut \^etre un bandit!
 \end{itemize}
 
-\section{}
+\section{Conventions de nommage}
+Soient :
+\begin{itemize}
+\item A.Kpub la clé publique d'Alexandre.
+\item B.Kpriv la clé privée de Benjamin.
+\item C.rib la relevé d'identité banquaire de Charlie.
+\item D.facture une facture emise pas Dominique.
+\item E.paiement l'ordre de paiement venant d'Edouard.
+\item S(F.rib, G.Kpub) le rib de Fr\'ederic signé par Gilles.
+\item S(H.Kpub) la signature du message courant avec la clé publique de Henri.
+\item C(I.rib, J.Kpriv) le rib de Ivan chiffré avec la clé privée de John.
+\end{itemize}
+Nous parlerons dans cet exercice de Victor, le vendeur, de Charles, le client, de Boris, le bandit et de Banque, la banque (nous ne ferons pas de publicit\'e ici).
+
+\section{Analyse et pr\'esuppositions}
+\'Etant donn\'e que le client et le vendeur payent ici avec un compte en banque, nous supposons qu'ils y ont au pr\'ealable ouvert un compte. Nous supposons ici que :
+\begin{itemize}
+\item Victor, Charles, Boris et Banque ont d\'ej\`a g\'en\'er\'e leurs paires de cl\'e publique/priv\'ee.
+\item Banque fournis \`a chaque personne ouvrant un compte (qu'on apellera Pierre) un certain nombre d'informations, dont S(P.rib+P.Kpub, Bq.Kpriv).
+\end{itemize}
+Nous supposons de plus que Banque connais les informations suivantes :
+\begin{itemize}
+\item Bq.Kpub
+\item Bq.kpriv
+\item V.rib
+\item V.Kpub
+\item C.rib
+\item C.Kpub
+\end{itemize}
+Nous supposons de plus que Victor (ainsi que Victor et Boris) connaissent les informations suivantes :
+\begin{itemize}
+\item Bq.Kpub
+\item V.Kpub
+\item V.Kpriv
+\item V.rib
+\item S(V.rib+V.Kpub, Bq.Kpriv)
+\end{itemize}
 
 \section{Proposition de solution}
+Dans un premier temps, lorsque Victor annonce le montant \`a Charles, il lui transmet 3 informations :
+\begin{itemize}
+\item V.rib
+\item le montant
+\item un num\'ero de transaction unique pour le vendeur
+\end{itemize}
+Le message de Victor vers Charles aura donc la forme :\\V.rib+montant+transactionID
+
+
+Pour payer Victor, Charles doit lui transmettre :
+\begin{itemize}
+\item V.rib
+\item le montant
+\item le num\'ero de transaction
+\item C(C.rib+c.Kpub, Bq.Kpriv)
+\end{itemize}
+Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)
 
 \section{Sceraii d'attaque par\'ees}
 \subsection{Le client est malhonn\^ete}
