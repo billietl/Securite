@@ -20,26 +20,27 @@
 
 \section{Sujet}
 Le but de l'exercice est d'imaginer un syst\`eme de ch\`eque num\'erique permettant \`a un client de payer un vendeur.
-Le ch\`eque represente un ordre de virement de compte client au compte vendeur que la banque doit \'effectuer.
+Le ch\`eque represente un ordre de virement de compte client au compte vendeur que la banque doit effectuer.
 \\
 \\
-La connexion avec la banque est payante. Pour limiter les frais, nos vendeur souhaite grouper les ch\`eques. 
-La connexion avec la banque est non garantie. (donc diff\'er\'e en cas d'echec).
+La connexion avec la banque est payante. Pour limiter les frais, nos vendeurs souhaitent grouper les ch\`eques. 
+La connexion avec la banque est non garantie (donc diff\'er\'e en cas d'echec).
 \\
 \\
-Il existe divers canal de communication: entre vendeur et banque, entre client et vendeur.
+Il existe divers canaux de communication: entre vendeur et banque et entre client et vendeur.
 \\
 \\
-L'outil de ch\`eque fournit par banque au client (Pas via  le vendeur).
+L'outil d'\'emission de ch\`eque est fournit par banque au client (pas via  le vendeur).
 \\
 \\
-But de l'exercice: Concevoir les 3 logiciels de mani\`ere securis\'e.
+But de l'exercice: Concevoir les 3 logiciels de mani\`ere securis\'e : g\'en\'eration de ch\`eque, v\'erification du ch\`eque et encaissement du ch\`eque.
 \\
 \\
 Attention:
 \begin{itemize}
   \item Le client peut \^etre un bandit!
   \item Le vendeur peut \^etre un bandit!
+  \item La banque ne peut \^etre qu'une banque! Merci la banque!
 \end{itemize}
 
 \section{Conventions de nommage}
@@ -122,8 +123,8 @@ Lors de l'\'emission de la facture, Victor g\'en\`ere un num\'ero de transaction
 Si Charles veut utiliser un ch\`eque d\'ej\`a utilis\'e, il devra fatalement y apposer un num\'ero de transaction qui a servi pour une autre facture.
 Or, si le num\'ero de transaction du ch\`eque ne correspond pas avec celui de la facture, le paiement sera rejet\'e directement par Victor.
 
-
-
+\subsection{Charles paye pour une facture qui ne le concerne pas}
+H\'elas, dans ce cas, Charles aurait d\^u v\'erifier ce pour quoi il paie.
 
 
 
