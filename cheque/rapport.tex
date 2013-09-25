@@ -105,6 +105,10 @@ Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C
 \subsection{Boris veut payer Victor avec le ch\`eque de Charles}
 
 \subsection{Victor veur encaisser plusieurs fois le ch\`eque de Charles}
+Lorsque Victor \'emet une facture, cette facture contient un num\'ero de transaction.
+Lorsque Charles \'emet un ch\`eque, ce ch\`eque contient ce m\^eme num\'ero de transaction.
+Si Victor essaie d'encaisser plusieurs fois le m\^eme ch\`eque, Banque verra passer plusieurs fois le m\^eme num\'ero de transaction pour le m\^eme RIB.
+La banque rejetera donc les r\'e-encaissements d'un m\^eme ch\`eque.
 
 \subsection{Victor veut augmenter le montant du ch\`eque}
 Lors de la cr\'eation du ch\`eque, Charles chiffre les informations concernant le destinataire (et notemment le montant) avec sa cl\'e priv\'ee.
