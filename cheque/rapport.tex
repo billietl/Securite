@@ -82,6 +82,7 @@ Nous supposons de plus que Victor (ainsi que Victor et Boris) connaissent les in
 \end{itemize}
 
 \section{Proposition de solution}
+\subsection{format des communications}
 Dans un premier temps, lorsque Victor annonce le montant \`a Charles, il lui transmet 3 informations :
 \begin{itemize}
 \item V.rib
@@ -98,15 +99,27 @@ Pour payer Victor, Charles doit lui transmettre :
 \item le num\'ero de transaction
 \item C(C.rib+c.Kpub, Bq.Kpriv)
 \end{itemize}
-Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)
+Donc, le ch\`eque aura la forme : \\C(V.RIB+montant+transactionID, C.Kpriv)+C(C.RIB+C.Kpub, Bq.Kpriv)
+\subsection{Tests r\'ealis\'es}
+Lorsque Victor re\c coit un ch\`eque, il d\'echiffre \\C(C.RIB+C.Kpub, Bq.Kpriv)\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
+Il utilise Kpub pour d\'echiffrer \\C(V.RIB+montant+transactionID, C.Kpriv)\\puis compare V.RIB, montant et transactionID avec celui qu'il a \'emit \`a Charles.
+Si les informations sont coh\'erentes, la ch\`eque est valide.
+
+
+Lorsque la banque re\c coit un ch\`eque, il d\'echiffre \\C(C.RIB+C.Kpub, Bq.Kpriv)\\avec Bq.Kpub afin de r\'ecup\'erer C.RIB et C.Kpub.
+Il utilise Kpub pour d\'echiffrer \\C(V.RIB+montant+transactionID, C.Kpriv)\\puis v\'erifie si le couple V.RIB, transactionID n'a pas d\'ej\`a \'et\'e utilis\'e dans un autre ch\`eque.
+S'il n'y a pas de probl\`emes, il peut debiter \textit{montant} du compte C.RIB et cr\'editer cette somme sur le compte V.RIB.
+
 
 \section{Sceraii d'attaque par\'ees}
 
 \subsection{Boris veut intercepter le ch\'eque de Charles}
-Borris ne peut pas remplacer C(vd.RIB+montant+transactionID, clt.Kpriv) pour cr\'editer son propre compte, la banque refusera le cheque, car la partie remlac\'ee n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e de Borris.
+Borris ne peut pas remplacer C(V.RIB+montant+transactionID, C.Kpriv) pour cr\'editer son propre compte, \'etant don\'e qu'il ne connais pas C.Kpriv.
+La banque refusera le ch\`eque, car la partie remlac\'ee n'a pas \'etait chiffr\'e avec C.Kpriv mais avec B.Kpriv.
 
 \subsection{Boris veut payer Victor avec le ch\`eque de Charles}
-Borris ne peut pas s'en servir chez Victor, Victor lira en d'\'echiffrant \\C(vd.RIB+montant+transactionID, clt.Kpriv) que ce ch\`eque \`a soit d\'ej\`a servis, soit ne sauras pas d'\'echiffrer C(vd.RIB+montant+transactionID, clt.Kpriv), \'etant donn\'e qu'il n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e priv\'ee de Borris.
+Borris ne peut pas s'en servir chez Victor, Victor lira en d\'echiffrant \\C(vd.RIB+montant+transactionID, clt.Kpriv) que ce ch\`eque \`a soit d\'ej\`a servis, soit ne sauras pas d'\'echiffrer C(vd.RIB+montant+transactionID, clt.Kpriv), \'etant donn\'e qu'il n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e priv\'ee de Borris.
+
 \subsection{Victor veur encaisser plusieurs fois le ch\`eque de Charles}
 Lorsque Victor \'emet une facture, cette facture contient un num\'ero de transaction.
 Lorsque Charles \'emet un ch\`eque, ce ch\`eque contient ce m\^eme num\'ero de transaction.
