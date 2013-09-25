@@ -105,7 +105,7 @@ Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C
 Borris ne peut pas remplacer C(vd.RIB+montant+transactionID, clt.Kpriv) pour cr\'editer son propre compte, la banque refusera le cheque, car la partie remlac\'ee n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e de Borris.
 
 \subsection{Boris veut payer Victor avec le ch\`eque de Charles}
-Borris ne peut pas s'en servir chez Victor, Victor lira en d'\'echiffrant C(vd.RIB+montant+transactionID, clt.Kpriv) que ce ch\`eque \`a soit d\'ej\`a servis, soit ne sauras pas d'\'echiffrer C(vd.RIB+montant+transactionID, clt.Kpriv), \'etant donn\'e qu'il n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e priv\'ee de Borris.
+Borris ne peut pas s'en servir chez Victor, Victor lira en d'\'echiffrant \\C(vd.RIB+montant+transactionID, clt.Kpriv) que ce ch\`eque \`a soit d\'ej\`a servis, soit ne sauras pas d'\'echiffrer C(vd.RIB+montant+transactionID, clt.Kpriv), \'etant donn\'e qu'il n'a pas \'etait chiffr\'e avec clt.Kpriv mais avec la cl\'e priv\'ee de Borris.
 \subsection{Victor veur encaisser plusieurs fois le ch\`eque de Charles}
 
 \subsection{Victor veut augmenter le montant du ch\`eque}
