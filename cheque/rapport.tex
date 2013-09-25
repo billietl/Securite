@@ -100,7 +100,7 @@ Pour payer Victor, Charles doit lui transmettre :
 Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C(clt.RIB+clt.Kpub, bq.Kpriv)
 
 \section{Sceraii d'attaque par\'ees}
-\subsection{Boris veut intercepter le ch\èque de Charles}
+\subsection{Boris veut intercepter le ch\`eque de Charles}
 
 \subsection{Boris veut payer Victor avec le ch\`eque de Charles}
 
@@ -109,7 +109,9 @@ Donc, le ch\`eque aura la forme : \\C(vd.RIB+montant+transactionID, clt.Kpriv)+C
 \subsection{Victor veut augmenter le montant du ch\`eque}
 
 \subsection{Charles veut r\'eutilser un ch\`eque d/'ej\`a utilis\'e}
-
+Lors de l'\'emission de la facture, Victor g\'en\`ere un num\'ero de transaction unique.
+Si Charles veut utiliser un ch\`eque d\'ej\`a utilis\'e, il devra fatalement y apposer un num\'ero de transaction qui a servi pour une autre facture.
+Or, si le num\'ero de transaction du ch\`eque ne correspond pas avec celui de la facture, le paiement sera rejet\'e directement par Victor.
 
 
 
