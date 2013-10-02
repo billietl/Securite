@@ -63,10 +63,8 @@ Soient :
 \item C.rib la relev\'e d'identit\'e banquaire de Charlie.
 \item D.facture une facture emise pas Dominique.
 \item E.paiement l'ordre de paiement venant d'Edouard.
-\item S(F.rib, G.Kpub) le rib de Fr\'ederic sign\'e par Gilles.
-\item S(H.Kpub) la signature du message courant avec la cl\'e publique de Henri.
-\item C(I.rib, J.Kpriv) le rib de Ivan chiffr\'e avec la cl\'e priv\'ee de John.
-\item K.HRid l'identifiant ``Human Readable'' de Kevin.
+\item C(F.rib, G.Kpriv) le rib de Frederic chiffr\'e avec la cl\'e priv\'ee de Geraldine.
+\item H.HRid l'identifiant ``Human Readable'' de Henri.
 \end{itemize}
 Nous parlerons dans cet exercice de Victor, le vendeur, de Charles, le client, de Boris, le bandit et de Banque, la banque (nous ne ferons pas de publicit\'e ici).
 
@@ -74,7 +72,7 @@ Nous parlerons dans cet exercice de Victor, le vendeur, de Charles, le client, d
 \'Etant donn\'e que le client et le vendeur payent ici avec un compte en banque, nous supposons qu'ils y ont au pr\'ealable ouvert un compte. Nous supposons ici que :
 \begin{itemize}
 \item Victor, Charles, Boris et Banque ont d\'ej\`a g\'en\'er\'e leurs paires de cl\'e publique/priv\'ee.
-\item Banque fournis \`a chaque personne ouvrant un compte (qu'on apellera Pierre) un certain nombre d'informations, dont S(P.HRid+P.RIB+P.Kpub, Bq.Kpriv).
+\item Banque fournis \`a chaque personne ouvrant un compte (qu'on apellera Pierre) un certain nombre d'informations, dont C(P.HRid+P.RIB+P.Kpub, Bq.Kpriv).
 \end{itemize}
 Nous supposons de plus que Banque connais les informations suivantes :
 \begin{itemize}
@@ -94,7 +92,7 @@ Nous supposons de plus que Victor (ainsi que Charles et Boris) connaissent les i
 \item V.Kpriv
 \item V.RIB
 \item V.HRid
-\item S(V.HRid+V.rib+V.Kpub, Bq.Kpriv)
+\item C(V.HRid+V.rib+V.Kpub, Bq.Kpriv)
 \end{itemize}
 
 \section{Proposition de solution}
@@ -107,7 +105,7 @@ Dans un premier temps, lorsque Victor annonce le montant \`a Charles, il lui tra
 \item un num\'ero de transaction unique pour le vendeur
 \item le ``certificat'' de la banque
 \end{itemize}
-Le message de Victor vers Charles aura donc la forme :\\\textbf{C(V.HRid+V.rib+montant+transactionID, V.Kpriv)+C(V.HRid+V.RIB+V.Kpub, bq.Kpriv)}
+Le message de Victor vers Charles aura donc la forme :\\\textbf{C(montant+transactionID, V.Kpriv)+C(V.HRid+V.RIB+V.Kpub, bq.Kpriv)}
 
 
 Pour payer Victor, Charles doit lui transmettre :
