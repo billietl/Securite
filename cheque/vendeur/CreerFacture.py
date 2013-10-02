@@ -27,11 +27,11 @@ transactionIdFile.write(str(nextTransId))
 
 
 #chiffrage de la 1ere partie de la facture C(montant+transactionID, V.kpriv)
-#firstFactureParts = rsa.chiffrer(str(montant)+str(transId), cleVendeur)
+#firstFactureParts = rsa.chiffrer(str(montant)+'/'+str(transId), cleVendeur)
 firstFactureParts = 'firstParts'
 
 #recuperation du certificat de la banque fournis au vendeur
 certif = open('banque.certif', 'r').readline()
 
 #creation de la facture
-open('facture'+str(int(transId))+'.fact', 'w+').write(firstFactureParts+certif)
+open('facture'+str(int(transId))+'.fact', 'w+').write(firstFactureParts+'\n'+certif)
