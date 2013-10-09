@@ -3,6 +3,7 @@
 from prime import *
 from mod import *
 from string_utils import _bourrer, _int_to_string, _string_to_int, _split_string
+from gmpy import *
 import struct
 
 class NotImplementedYetError(Exception):
@@ -16,7 +17,7 @@ def generer_cles(taille):
    n = p*q
    phi = (p-1)*(q-1)
    e = 3
-   while (not pgcd(e,phi) == 1) and (e < phi):
+   while (not gcd(e,phi) == 1) and (e < phi):
        e = e+2
    d = invMOD(e, phi)
    return ((n,e),(n,d))
@@ -49,8 +50,6 @@ def _dechiffrer_octet(message, kPriv):
 def _dechiffrer_string(message, kPriv, chunk):
    retour = ''
    message = message.split(',')
-   print "dechiffrage de :"
-   print message
    for c in message:
        output_buffer = int(c)
        output_buffer = _dechiffrer_octet(output_buffer, kPriv)

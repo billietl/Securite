@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+def powMOD(base, exp, mod):
+    result = 1
+    while exp>0:
+        if (exp & 1) > 0:
+            result = (result * base) % mod
+        exp = exp>>1
+        base = (base*base)%mod
+    return result
+
 def invMOD(number,module):
     x=0; y=1;
     u=1; v=0;
