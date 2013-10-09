@@ -14,7 +14,6 @@ def jacobi(a, b):
 
     :returns: -1, 0 or 1
     '''
-
     assert a > 0
     assert b > 0
 
@@ -36,7 +35,6 @@ def jacobi_witness(x, n):
     '''Returns False if n is an Euler pseudo-prime with base x, and
     True otherwise.
     '''
-
     j = jacobi(x, n) % n
 
     f = pow(x, n >> 1, n)
@@ -51,7 +49,6 @@ def randomized_primality_testing(n, k):
     Returns False if the number is composite, and True if it's
     probably prime.
     '''
-
     # 50% of Jacobi-witnesses can report compositness of non-prime numbers
 
     # The implemented algorithm using the Jacobi witness function has error
@@ -61,7 +58,6 @@ def randomized_primality_testing(n, k):
     # t = int(math.ceil(k / log(1 / q, 2)))
     # So t = k / log(2, 2) = k / 1 = k
     # this means we can use range(k) rather than range(t)
-
     for _ in range(k):
         x = int(random.uniform(1, n-1))
         if jacobi_witness(x, n): return False
@@ -76,7 +72,6 @@ def is_prime(number):
     >>> is_prime(41)
     True
     '''
-
     return randomized_primality_testing(number, 6)
 
 def generate_prime(size):

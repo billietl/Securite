@@ -20,7 +20,7 @@ def generer_cles(taille):
    d = invMOD(e, phi)
    return ((n,e),(n,d))
 
-def _bourrer(message, chunk=4):
+def _bourrer(message, chunk):
     nb_pad = chunk - (len(message)%chunk)
     for i in xrange(0,nb_pad):
         message = message + chr(0)
@@ -29,40 +29,47 @@ def _bourrer(message, chunk=4):
 def _chiffrer_octet(message, kPub):
    return pow(message, kPub[1], kPub[0])
 
-def _int_to_string(integer, chunk=4):
-    print integer
-    octet_array = []
-    while integer > 0:
-        octet_array.append(integer & 0xFF)
-        integer >>= 8
-    l = len(octet_array)
-    if chunk >= 1:
-        octet_array = [0]*(chunk-l) + octet_array
-    print "-->" + str(octet_array)
-    return octet_array
-
-def _string_to_int(phrase):
-    print phrase
-    print "-->" + str(int(''.join(['%02x' % i for i in phrase]), 16))
-    return int(''.join(['%02x' % i for i in phrase]), 16)
-
-def _chiffrer_string(message, kPub, chunk=4):
+def _int_to_string(integer, chunk):
     buffer = ''
-    index = 0
-    while index < len(message):
-        in_buffer = list()
-        i = 0
-        for i in xrange(0,chunk):
-            in_buffer.append(ord(message[index+i]))
-        index = index+chunk
-        in_buffer = _string_to_int(in_buffer)
-        buffer = buffer + unichr(_chiffrer_octet(in_buffer, kPub))
+    while integer>0:
+        char = integer % pow(2,8)
+        if not char == 0: buffer = buffer + chr(char)
+        integer = integer / pow(2,8)
+    if len(buffer)>chunk:
+        raise Exception("Trop d'informations a extraire de cet integer !!")
+    return buffer[::-1]
+
+def _string_to_int(phrase, chunk):
+    if len(phrase)>chunk:
+        raise Exception("La taille de la phrase est plus grande que chunk (="+str(chunk)+")")
+    buffer = 0
+    for c in phrase:
+        buffer = buffer + ord(c)
+        buffer = buffer * pow(2, 8)
     return buffer
 
-def chiffrer(message, kPub):
+def _split_string(message, chunk):
+    buffer = list()
+    index = 0
+    while index < len(message):
+        buffer.append(message[index:index+chunk])
+        index = index+chunk
+    return buffer
+
+def _chiffrer_string(message, kPub, chunk):
+    buffer = ''
+    index = 0
+    message = _split_string(message, chunk)
+    for morceau in message:
+        in_buffer = _string_to_int(morceau, chunk)
+        buffer = buffer + unichr(_chiffrer_octet(in_buffer, kPub))
+        index = index+chunk
+    return buffer
+
+def chiffrer(message, kPub, chunk=4):
    if isinstance(message, (str,unicode)):
-       message = _bourrer(message)
-       return _chiffrer_string(message, kPub)
+       message = _bourrer(message, chunk)
+       return _chiffrer_string(message, kPub, chunk)
    if isinstance(message, int):
        return _chiffrer_octet(message, kPub)
    raise Exception('Arrete de me passer n\'importe quoi a chiffrer')
@@ -70,17 +77,17 @@ def chiffrer(message, kPub):
 def _dechiffrer_octet(message, kPriv):
    return pow(message, kPriv[1], kPriv[0])
 
-def _dechiffrer_string(message, kPriv, chunk=4):
+def _dechiffrer_string(message, kPriv, chunk):
    buffer = ''
    for c in message:
        output = _dechiffrer_octet(ord(c), kPriv)
-       output_buffer = _int_to_string(output)
-       buffer = buffer + str(output_buffer)
-   return buffer
+       output_buffer = _int_to_string(output, chunk)
+       buffer = buffer + output_buffer
+   return buffer 
 
-def dechiffrer(message, kPriv):
+def dechiffrer(message, kPriv, chunk=4):
    if isinstance(message, (str,unicode)):
-       return _dechiffrer_string(message, kPriv)
+       return _dechiffrer_string(message, kPriv, chunk)
    if isinstance(message, int):
        return _dechiffrer_octet(message, kPriv)
    raise Exception('Arrete de me passer n\'importe quoi a dechiffrer')

@@ -1,6 +1,3 @@
-def ModularExponantiation(base, exposant, module):
-    return pow(base, exposant, module)
-
 def invMOD(number,module):
     x=0; y=1;
     u=1; v=0;
