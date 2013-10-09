@@ -2,6 +2,7 @@
 
 from prime import *
 from mod import *
+from string_utils import _bourrer, _int_to_string, _string_to_int, _split_string
 import struct
 
 class NotImplementedYetError(Exception):
@@ -20,49 +21,24 @@ def generer_cles(taille):
    d = invMOD(e, phi)
    return ((n,e),(n,d))
 
-def _bourrer(message, chunk=4):
-    nb_pad = chunk - (len(message)%chunk)
-    for i in xrange(0,nb_pad):
-        message = message + chr(0)
-    return message
-
 def _chiffrer_octet(message, kPub):
    return pow(message, kPub[1], kPub[0])
 
-def _int_to_string(integer, chunk=4):
-    print integer
-    octet_array = []
-    while integer > 0:
-        octet_array.append(integer & 0xFF)
-        integer >>= 8
-    l = len(octet_array)
-    if chunk >= 1:
-        octet_array = [0]*(chunk-l) + octet_array
-    print "-->" + str(octet_array)
-    return octet_array
+def _chiffrer_string(message, kPub, chunk):
+    output_buffer = ''
+    message = _split_string(message, chunk)
+    for morceau in message:
+        in_buffer = _string_to_int(morceau, chunk)
+        if in_buffer == 0:
+            continue
+        in_buffer = _chiffrer_octet(in_buffer, kPub)
+        output_buffer = output_buffer + str(in_buffer) + ','
+    return output_buffer[:-1]
 
-def _string_to_int(phrase):
-    print phrase
-    print "-->" + str(int(''.join(['%02x' % i for i in phrase]), 16))
-    return int(''.join(['%02x' % i for i in phrase]), 16)
-
-def _chiffrer_string(message, kPub, chunk=4):
-    buffer = ''
-    index = 0
-    while index < len(message):
-        in_buffer = list()
-        i = 0
-        for i in xrange(0,chunk):
-            in_buffer.append(ord(message[index+i]))
-        index = index+chunk
-        in_buffer = _string_to_int(in_buffer)
-        buffer = buffer + unichr(_chiffrer_octet(in_buffer, kPub))
-    return buffer
-
-def chiffrer(message, kPub):
-   if isinstance(message, (str,unicode)):
-       message = _bourrer(message)
-       return _chiffrer_string(message, kPub)
+def chiffrer(message, kPub, chunk=4):
+   if isinstance(message, (str)):
+       message = _bourrer(message, chunk)
+       return _chiffrer_string(message, kPub, chunk)
    if isinstance(message, int):
        return _chiffrer_octet(message, kPub)
    raise Exception('Arrete de me passer n\'importe quoi a chiffrer')
@@ -70,17 +46,21 @@ def chiffrer(message, kPub):
 def _dechiffrer_octet(message, kPriv):
    return pow(message, kPriv[1], kPriv[0])
 
-def _dechiffrer_string(message, kPriv, chunk=4):
-   buffer = ''
+def _dechiffrer_string(message, kPriv, chunk):
+   retour = ''
+   message = message.split(',')
+   print "dechiffrage de :"
+   print message
    for c in message:
-       output = _dechiffrer_octet(ord(c), kPriv)
-       output_buffer = _int_to_string(output)
-       buffer = buffer + str(output_buffer)
-   return buffer
+       output_buffer = int(c)
+       output_buffer = _dechiffrer_octet(output_buffer, kPriv)
+       output_buffer = _int_to_string(output_buffer, chunk)
+       retour = retour + output_buffer
+   return retour 
 
-def dechiffrer(message, kPriv):
-   if isinstance(message, (str,unicode)):
-       return _dechiffrer_string(message, kPriv)
+def dechiffrer(message, kPriv, chunk=4):
+   if isinstance(message, (str)):
+       return _dechiffrer_string(message, kPriv, chunk)
    if isinstance(message, int):
        return _dechiffrer_octet(message, kPriv)
    raise Exception('Arrete de me passer n\'importe quoi a dechiffrer')
