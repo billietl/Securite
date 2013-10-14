@@ -5,6 +5,7 @@ from mod import *
 from string_utils import _bourrer, _int_to_string, _string_to_int, _split_string
 from gmpy import *
 import struct
+import sys
 
 class NotImplementedYetError(Exception):
     pass
@@ -21,6 +22,20 @@ def generer_cles(taille):
        e = e+2
    d = invMOD(e, phi)
    return ((n,e),(n,d))
+
+def sauvegarder_cles(kPub, kPriv, path):
+    pub = open(path+'/public.key', 'w')
+    pub.write(str(kPub[0])+'\n'+str(kPub[1])+'\n')
+    pub.close()
+    priv = open(path+'/private.key', 'w')
+    priv.write(str(kPriv[0])+'\n'+str(kPriv[1])+'\n')
+    priv.close()
+
+def charger_cle(path):
+    key = open(path, 'r')
+    n = int(key.readline())
+    e = int(key.readline())
+    return (n,e)
 
 def _chiffrer_octet(message, kPub):
    return pow(message, kPub[1], kPub[0])
