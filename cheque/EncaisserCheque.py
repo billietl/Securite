@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import sys
+sys.path.append("./lib")
+import rsa
 
-BankPubKey = '991'
+BankPubKey = charger_cle("banque/public.key")
 
 #recuperation du nom de fichier du cheque à encaisser
 chequeFileName = sys.argv[1]
@@ -12,7 +14,7 @@ cheque = open(factureFileName).read().split('\n', 2)
 
 
 certifClient = rsa.dechiffrer(cheque[1], BankPubKey).split('/')
-#ClientHRId = certifClient[0]
+ClientHRId = certifClient[0]
 ribClient = certifClient[1]
 pubKeyClient = certifClient[2]
 
