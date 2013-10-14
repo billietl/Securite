@@ -1,37 +1,28 @@
 #!/usr/bin/env python
 
+import os
 import sys
+sys.path.append("./lib")
+import rsa
+import files
 
-#recuperation de montant passer en param et controle du type de valeur
-try:
-    montant = float(sys.argv[1])
-except ValueError:
-    raise "montant non numerique"
+def usage():
+    print "CreerFacture <montant> <nom vendeur>"
+    exit(1)
 
-   
-#recuperation de la cle privee du vendeur
-cleVendeur = open('vendeur.key', 'r').readline()
+def main():
+    if len(sys.argv)<3:
+        usage()
+    try:
+        montant = float(sys.argv[1])
+    except ValueError:
+        usage()
+    if not os.path.isfile(sys.argv[2]+"/private.key"):
+        usage()
+    vendeur = sys.argv[2]
 
-#recuperation de l'id de transaction
-transactionIdFile = open('transaction.id', 'r+')
-try:
-    transId = float(transactionIdFile.readline())
-except ValueError:
-    raise "ficher transaction.id corrompu"
+    facture = files.Facture(montant, vendeur)
+    facture.sauvegarder()
 
-#actualisation du futur id de transaction
-nextTransId = transId+1.0
-transactionIdFile.seek(0)
-transactionIdFile.truncate()
-transactionIdFile.write(str(nextTransId))
-
-
-#chiffrage de la 1ere partie de la facture C(montant+transactionID, V.kpriv)
-#firstFactureParts = rsa.chiffrer(str(montant)+'/'+str(transId), cleVendeur)
-firstFactureParts = 'firstParts'
-
-#recuperation du certificat de la banque fournis au vendeur
-certif = open('banque.certif', 'r').readline()
-
-#creation de la facture
-open('facture'+str(int(transId))+'.fact', 'w+').write(firstFactureParts+'\n'+certif)
+if __name__ == "__main__":
+    main()

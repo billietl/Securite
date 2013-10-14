@@ -1,34 +1,37 @@
 #!/usr/bin/env python
 
+import os
 import sys
+sys.path.append("./lib")
+import rsa
+import files
 
-BankPubKey = '991'
+def usage():
+    print "CreerCheque <fichier facture> <nom client>"
+    exit(1)
 
-#recuperation du nom de fichier de facture dont on veut realiser le chaque
-factureFileName = sys.argv[1]
+def main():
+    if len(sys.argv)<3:
+        usage()
+    if not os.path.isfile(sys.argv[1]):
+        usage()
+    if not os.path.isdir(sys.argv[2]):
+        usage()
 
-facture = open(factureFileName).read().split('\n', 2)
-certifVendeur = rsa.dechiffrer(facture[1], BankPubKey).split('/')
-#vendeurHRId = certifVendeur[0]
-ribVendeur = certifVendeur[1]
-pubKeyVendeur = certifVendeur[2]
+    nom_client = sys.argv[2]
 
+    facture = files.charger_facture(sys.argv[1])
 
-facture = rsa.dechiffrer(facture[0], pubKeyVendeur).split('/')
-montant = facture[0]
-transactionId = facture[2]
+    reponse = "caca"
+    while (not reponse=='oui') and (not reponse=='non'):
+        reponse = raw_input("voulez-vous payer " + str(facture.montant) + "euros a " + facture.nom_vendeur + " ? (oui/non)")
 
-#recuperation de la cle privee du client
-cleClient = open('client.key', 'r').readline()
+    if reponse=='non':
+        print "annulation du paiement"
+        exit(2)
+    cheque = files.Cheque(facture, nom_client)
+    cheque.sauvegarder()
 
+if __name__ == "__main__":
+    main()
 
-#chiffrage de la 1ere partie du cheque C(V.RIB+montant+transactionID, C.Kpriv)
-#firstChequeParts = rsa.chiffrer(ribVendeur+'/'+montant+'/'+transactionId, cleClient)
-firstChequeParts = 'firstParts'
-
-
-#recuperation du certificat de la banque fournis au client
-certif = open('banque.certif', 'r').readline()
-
-#creation du cheque
-open('cheque'+str(int(transId))+'.fact', 'w+').write(firstChequeParts+'\n'+certif)
