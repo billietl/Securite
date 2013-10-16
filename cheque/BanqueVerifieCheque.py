@@ -22,7 +22,7 @@ def main():
     
     cheque = files.charger_cheque(sys.argv[1])
     transactionsFile = open('banque/transactionsFile', 'r')
-    transaction = str(cheque.vendeur_rib)+":"+str(cheque.transactionID)
+    transaction = str(cheque.vendeur_rib)+":"+str(cheque.transactionID)+"\n"
 
     if transaction in transactionsFile.readlines():
         __DENIED__(cheque)
