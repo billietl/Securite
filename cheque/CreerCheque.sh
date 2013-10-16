@@ -20,7 +20,7 @@ tmpdir=tmp$RANDOM$RANDOM$RANDOM$RANDOM
 mkdir $tmpdir
 cd ./$tmpdir
 tar xvf ../$1
-tar xvf ./banque.certif.tgz
+tar xvf banque.certif.tgz
 cd ../$tmpdir
 # Verification
 openssl dgst -sha256 -verify $tmpdir/public.key -signature $tmpdir/facture.txt.sha256 $tmpdir/facture.txt >/dev/null 2>/dev/null

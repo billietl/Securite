@@ -23,4 +23,8 @@ echo $transactionID > $2/transaction.id
 # Creation fichier
 echo "$1\n$transactionID" > facture.txt
 cat facture.txt | openssl dgst -sha256 -sign $2/private.key > facture.txt.sha256
-tar czf $2/facture$transactionID.tgz facture.txt facture.txt.sha256 $2/banque.certif.tgz
+cp $2/banque.certif.tgz banque.certif.tgz
+tar czf $2/facture$transactionID.tgz facture.txt facture.txt.sha256 banque.certif.tgz
+
+# Nettoyage
+rm facture.txt facture.txt.sha256 banque.certif.tgz
