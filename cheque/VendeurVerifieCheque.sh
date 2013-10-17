@@ -14,11 +14,11 @@ if [ ! $# -eq 2 ]
 then 
     usage
 fi
-if ! ls $1 >/dev/null
+if [ ! -d $1 ]
 then
     usage
 fi
-if ! ls $2 >/dev/null
+if [ ! -d $2 ]
 then
     usage
 fi
@@ -70,7 +70,6 @@ then
 fi
 
 # Nettoyage
-cd ..
-rm -r $tmpdir
+clean
 
 echo "Seems legit."

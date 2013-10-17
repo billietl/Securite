@@ -9,7 +9,7 @@ if [ ! $# -eq 1 ]
 then 
     usage
 fi
-if ! ls $1 >/dev/null
+if [ ! -d $1 ]
 then
     usage
 fi
@@ -32,8 +32,8 @@ echo $1 >> ./banque.certif
 echo $newrib >> ./banque.certif
 echo $cle >> ./banque.certif
 cp ../$1/public.key .
-cat ./banque.certif | openssl dgst -sha256 -sign ../banque/private.key > ./banque.certif.sha256
-tar czf ../$1/banque.certif.tgz ./banque.certif ./banque.certif.sha256 ./public.key
+cat banque.certif | openssl dgst -sha256 -sign ../banque/private.key > banque.certif.sha256
+tar czf ../$1/banque.certif.tgz banque.certif banque.certif.sha256 public.key
 
 # Nettoyage
 cd ..

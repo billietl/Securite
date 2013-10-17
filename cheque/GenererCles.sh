@@ -9,7 +9,7 @@ if [ ! $# -eq 2 ]
 then 
     usage
 fi
-if ! ls $2 >/dev/null
+if [ ! -d $2 ]
 then
     usage
 fi

@@ -14,7 +14,7 @@ if [ ! $# -eq 1 ]
 then 
     usage
 fi
-if ! ls $1 >/dev/null
+if [ ! -d $1 ]
 then
     usage
 fi
@@ -24,8 +24,8 @@ mkdir $tmpdir
 cd $tmpdir
 
 # Extraction des fichiers
-tar xzf ../$1 >/dev/null
-tar xzf banque.certif.tgz >/dev/null
+tar xzf ../$1
+tar xzf banque.certif.tgz
 
 # Convertion en variables
 rib=`cat cheque.txt | head -n 1`

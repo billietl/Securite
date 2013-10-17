@@ -9,7 +9,7 @@ if [ ! $# -eq 2 ]
 then 
     usage
 fi
-if ! ls $2 >/dev/null
+if [ ! -d $2 ]
 then
     usage
 fi
@@ -28,7 +28,7 @@ echo $transactionID > ../$2/transaction.id
 echo $1 > facture.txt
 echo $transactionID >> facture.txt
 cat facture.txt | openssl dgst -sha256 -sign ../$2/private.key > facture.txt.sha256
-cp ../$2/banque.certif.tgz ./banque.certif.tgz
+cp ../$2/banque.certif.tgz .
 tar czf ../$2/facture$transactionID.tgz facture.txt facture.txt.sha256 banque.certif.tgz
 
 # Nettoyage
