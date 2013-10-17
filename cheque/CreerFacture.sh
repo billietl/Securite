@@ -14,17 +14,22 @@ then
     usage
 fi
 
+tmpdir=tmp$RANDOM$RANDOM$RANDOM$RANDOM
+mkdir $tmpdir
+cd $tmpdir
+
 # Generation transactionID
-if [ ! -e $2/transaction.id ]; then echo "0" >  $2/transaction.id; fi
-transactionID=`cat $2/transaction.id`
+if [ ! -e ../$2/transaction.id ]; then echo "0" >  ../$2/transaction.id; fi
+transactionID=`cat ../$2/transaction.id`
 transactionID=$(($transactionID+1))
-echo $transactionID > $2/transaction.id
+echo $transactionID > ../$2/transaction.id
 
 # Creation fichier
 echo "$1\n$transactionID" > facture.txt
-cat facture.txt | openssl dgst -sha256 -sign $2/private.key > facture.txt.sha256
-cp $2/banque.certif.tgz banque.certif.tgz
-tar czf $2/facture$transactionID.tgz facture.txt facture.txt.sha256 banque.certif.tgz
+cat facture.txt | openssl dgst -sha256 -sign ../$2/private.key > facture.txt.sha256
+cp ../$2/banque.certif.tgz ./banque.certif.tgz
+tar czf ../$2/facture$transactionID.tgz facture.txt facture.txt.sha256 banque.certif.tgz
 
 # Nettoyage
-rm facture.txt facture.txt.sha256 banque.certif.tgz
+cd ..
+rm -r $tmpdir
