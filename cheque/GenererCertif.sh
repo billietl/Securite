@@ -28,7 +28,9 @@ echo $newrib >> ../banque/ribsFile
 
 # Creation du fichier
 if [ -e ../$1/banque.certif.tgz ]; then rm ../$1/banque.certif.tgz; fi
-echo "$1\n$newrib\n$cle" > ./banque.certif
+echo $1 >> ./banque.certif
+echo $newrib >> ./banque.certif
+echo $cle >> ./banque.certif
 cp ../$1/public.key .
 cat ./banque.certif | openssl dgst -sha256 -sign ../banque/private.key > ./banque.certif.sha256
 tar czf ../$1/banque.certif.tgz ./banque.certif ./banque.certif.sha256 ./public.key
