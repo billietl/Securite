@@ -21,18 +21,16 @@ mkdir $tmpdir
 cd ./$tmpdir
 tar xvf ../$1
 tar xvf banque.certif.tgz
-cd ../$tmpdir
 # Verification
-openssl dgst -sha256 -verify $tmpdir/public.key -signature $tmpdir/facture.txt.sha256 $tmpdir/facture.txt >/dev/null 2>/dev/null
-validate=$?
+openssl dgst -sha256 -verify ./public.key -signature ./facture.txt.sha256 ./facture.txt >/dev/null 2>/dev/null
+signature_ok=$?
 # Extraction des données
-montant=`cat $tmpdir/facture.txt | head -n 1`
-transactionID=`cat $tmpdir/facture.txt | tail -n 1`
-HRid=`cat $tmpdir/banque.certif | head -n 1`
-RIB=`cat $tmpdir/banque.certif | head -n 2 | tail -n 1`
-rm -rf $tmpdir
+montant=`cat ./facture.txt | head -n 1`
+transactionID=`cat ./facture.txt | tail -n 1`
+HRid=`cat ./banque.certif | head -n 1`
+RIB=`cat ./banque.certif | head -n 2 | tail -n 1`
 # Exit si signature fausse
-if ! $validate
+if ! $signature_ok
 then
     echo "facture mal signée"
     exit 2
@@ -52,5 +50,7 @@ fi
 echo "$RIB\n$montant\n$transactionID" > cheque.txt
 cat cheque.txt | openssl dgst -sha256 -sign $2/private.key > cheque.txt.sha256
 tar czf $2/cheque$RIB$transactionID.tgz cheque.txt cheque.txt.sha256 $2/banque.certif.tgz
+
 # Nettoyage
-rn cheque.txt cheque.txt.sha256
+cd ..
+rm -r $tmpdir
