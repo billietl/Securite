@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage(){
-    echo $0 " <fichier cheque>"
+    echo $0 "<fichier cheque>"
     exit 1
 }
 
@@ -14,7 +14,7 @@ if [ ! $# -eq 1 ]
 then 
     usage
 fi
-if [ ! -d $1 ]
+if [ ! -e $1 ]
 then
     usage
 fi
@@ -25,7 +25,11 @@ cd $tmpdir
 
 # Extraction des fichiers
 tar xzf ../$1
-tar xzf banque.certif.tgz
+if ! bash ../lib/evb.sh banque.certif.tgz ../banque/public.key
+then
+    clean
+    exit 4
+fi
 
 # Convertion en variables
 rib=`cat cheque.txt | head -n 1`
@@ -37,7 +41,7 @@ transaction=$rib$transactionID
 touch ../banque/transactionsFile
 if grep -e $transaction ../banque/transactionsFile >/dev/null
 then
-    echo "Ce chèque a déjà été encaissé !"
+    echo "Ce cheque a deja ete encaisse !"
     clean
     exit 1
 fi

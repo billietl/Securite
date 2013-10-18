@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage(){
-    echo "$0 <montant> <nom vendeur>"
+    echo $0 "<montant> <nom vendeur>"
     exit 1
 }
 

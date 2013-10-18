@@ -1,24 +1,24 @@
 #!/bin/bash
 
 usage(){
-    echo $0 " <fichier facture> <fichier cheque>"
+    echo $0 "<fichier facture> <fichier cheque>"
     exit 1
 }
 
 clean(){
     cd ..
-    rm $tmpdir
+    rm -r $tmpdir
 }
 
 if [ ! $# -eq 2 ]
 then 
     usage
 fi
-if [ ! -d $1 ]
+if [ ! -e $1 ]
 then
     usage
 fi
-if [ ! -d $2 ]
+if [ ! -e $2 ]
 then
     usage
 fi
@@ -31,14 +31,24 @@ cd $tmpdir
 mkdir facture
 cd facture
 tar xzf ../../$1
-tar xzf banque.certif.tgz
+if ! bash ../../lib/evb.sh banque.certif.tgz ../../banque/public.key
+then
+    cd ..
+    clean
+    exit 4
+fi
 cd ..
 
 # Extraction cheque
 mkdir cheque
 cd cheque
 tar xzf ../../$2
-tar xzf banque.certif.tgz
+if ! bash ../../lib/evb.sh banque.certif.tgz ../../banque/public.key
+then
+    cd ..
+    clean
+    exit 4
+fi
 cd ..
 
 # Convertion en variables
@@ -52,19 +62,19 @@ tid_facture=`cat facture/facture.txt | tail -n 1`
 # Verifications
 if [ $rib_cheque != $rib_facture ]
 then
-    echo "Le chèque ne t'es pas addressé !"
+    echo "Le cheque ne t'es pas addresse !"
     clean
     exit 1
 fi
 if [ $tid_cheque != $tid_facture ]
 then
-    echo "Le chèque concerne une autre vente !"
+    echo "Le cheque concerne une autre vente !"
     clean
     exit 1
 fi
 if [ $montant_cheque != $montant_facture ]
 then
-    echo "Le chèque n'a pas le bon montant !"
+    echo "Le cheque n'a pas le bon montant !"
     clean
     exit 1
 fi
