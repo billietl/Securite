@@ -6,6 +6,7 @@
 \usepackage{listings}
 \usepackage{cite}
 \usepackage{textcomp}
+\usepackage{graphicx}
 
 % Reglages du document
 \lstset{language=bash, frame=single, breaklines=true, basicstyle=\ttfamily, keywordstyle=\bfseries}
@@ -42,5 +43,16 @@ Pour assurer l'int\'egrit\'e d'un message, nous devons d\'esormais passer par la
 \section{Trace d'execution}
 
 \section{Arborescence de fichiers}
+Le but du certificat d\'elivr\'e par la banque est d'avoir une preuve d'authenticit\'e du compte de l'acteur qui le d\'elivrera.
+Pour cela il contient 3 \'el\'ement:
+\begin{itemize}
+\item Le certificat en clair (qui mentionne en 3 lignes: Nom, N° de compte et la cl\'e public du propri\'etaire de ce compte)
+\item Le hash\'e-chiffr\'e
+\item La cl\'e public de la banque pour lire le hash\'e et v\'erifier l'authenticit\'e du banque.certif
+\end{itemize}
+\includegraphics[scale=0.75]{banque_certif.jpg}
 
+\includegraphics[scale=0.75]{facture_archi.jpg}
+
+\includegraphics[scale=0.75]{cheque_archi.jpg}
 \end{document}
