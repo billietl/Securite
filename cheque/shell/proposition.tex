@@ -53,26 +53,26 @@ touch banque/ribsFile
 \section{Trace d'execution}
 Voici une trace d'ex\'ecution type. En cas de doute, vous pouvez invoquer les scripts sans arguments pour connaitre l'usage.
 \begin{verbatim}
-# Creation d'un dossier par acteur. Victor est le vendeur et Charles, le client
+$ # Creation d'un dossier par acteur. Victor est le vendeur et Charles, le client
 $ mkdir Victor Charles
-# Generation des cles RSA des acteurs
+$ # Generation des cles RSA des acteurs
 $ sh GenererCles.sh 512 Victor
 $ sh GenererCles.sh 512 Charles
-# Generation des certificats de la banque
+$ # Generation des certificats de la banque
 $ sh GenererCertif.sh Victor
 $ sh GenererCertif.sh Charles
-# Creation d'une facture
+$ # Creation d'une facture
 $ sh CreerFacture.sh 10.00 Victor
-# Creation d'un cheque
+$ # Creation d'un cheque
 $ sh CreerCheque.sh Victor/facture1.tgz Charles
 voulez-vous payer 10.00 euros a Victor ? (oui/non) non
 paiement annule
 $ sh CreerCheque.sh Victor/facture1.tgz Charles
 voulez-vous payer 10.00 euros a Victor ? (oui/non) oui
-# Verification de cheque par le vendeur
+$ # Verification de cheque par le vendeur
 $ sh VendeurVerifieCheque.sh Victor/facture1.tgz Charles/cheque3927128561.tgz
 Seems legit.
-# Verification du cheque par la banque
+$ # Verification du cheque par la banque
 $ sh BanqueVerifieCheque.sh Charles/cheque3927128561.tgz
 Seems legit.
 \end{verbatim}
