@@ -87,30 +87,30 @@ Ces fichiers sont g\'en\'er\'es selon la forme suivante :
 
 \section{Arborescence de fichiers}
 \subsection{Les certificats d\'elivr\'e par la banque}
-Le but du certificat d\'elivr\'e par la banque est d'avoir une preuve d'authenticit\'e du compte de l'acteur qui le d\'elivrera.
-Pour cela il contient 3 \'el\'ement:
+Le but du certificat d\'elivr\'e par la banque est d'avoir une preuve de l'authenticit\'e du compte de l'acteur qui le d\'elivrera.
+Pour cela il contient 3 \'el\'ement :
 \begin{itemize}
-\item Le certificat en clair (qui mentionne en 3 lignes: Nom, N° de compte et la cl\'e public du propri\'etaire de ce compte)
-\item Le hash\'e-chiffr\'e du certificat
-\item La cl\'e public de la banque pour lire le hash\'e et v\'erifier l'authenticit\'e du banque.certif
+\item Le certificat en clair (qui mentionne en 3 lignes: Nom, N° de compte et la cl\'e publique du propri\'etaire de ce compte).
+\item Le hash\'e-chiffr\'e du certificat.
+\item La cl\'e publique de la banque pour v\'erifier le hash\'e et v\'erifier l'authenticit\'e du banque.certif.
 \end{itemize}
 \includegraphics[scale=0.75]{banque_certif.jpg}
 
 \subsection{La facture}
-La facture est repr\'esent\'e par une archive qui contient les \'el\'ement suivant:
+La facture est repr\'esent\'ee par une archive qui contient les \'el\'ements suivants :
 \begin{itemize}
-\item La facture en clair (qui mentionne en 2 lignes: montant et N° de facture)
-\item Le hash\'e-chiffr\'e de la facture
-\item L'archive banque.certif.tgz qui a \'et\'e d\'elivr\'e par la banque, pour que le client aie les coordon\'e banquaire du vendeur.
+\item La facture en clair (qui mentionne en 2 lignes: le montant et N° de la facture).
+\item Le hash\'e-chiffr\'e de la facture.
+\item L'archive banque.certif.tgz qui a \'et\'e d\'elivr\'e par la banque, pour que le client aie les coordon\'ees banquaire du vendeur.
 \end{itemize}
 \includegraphics[scale=0.75]{facture_archi.jpg}
 
 \subsection{Le cheque}
-Le cheque est repr\'esent\'e par une archive qui contient les \'el\'ement suivant:
+Le ch\`eque est repr\'esent\'e par une archive qui contient les \'el\'ements suivants :
 \begin{itemize}
-\item Le cheque en clair (qui mentionne en 3 lignes: le rib du vendeur, le montant et le N° de facture)
-\item Le hash\'e-chiffr\'e du cheque
-\item L'archive banque.certif.tgz qui a \'et\'e d\'elivr\'e par la banque, pour que le vendeur aie les coordon\'e banquaire du client.
+\item Le ch\`eque en clair (qui mentionne en 3 lignes: le RIB du vendeur, le montant et le N° de la facture).
+\item Le hash\'e-chiffr\'e du ch\`eque.
+\item L'archive banque.certif.tgz qui a \'et\'e d\'elivr\'e par la banque, pour que le vendeur aie les coordon\'ees banquaire du client.
 \end{itemize}
 \includegraphics[scale=0.75]{cheque_archi.jpg}
 
