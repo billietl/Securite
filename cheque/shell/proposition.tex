@@ -34,7 +34,7 @@
 \section{Changements techniques}
 Dans la version \'ecrite en python de notre ch\'equier, nous utilisions le chiffrement par RSA pour s'assurer qu'un message soit bien \'emit par la personne avec laquelle on discute.
 Nous pouvions donc communiquer librement les ``cl\'es publiques'' afin de d\'echiffrer ces messages.
-Dans la philosophie d'openSSL, le chiffrement sert \`a emp\^echer un tiers de lire un message s'il ne lui est pas address\'e.
+Dans la philosophie d'OpenSSL, le chiffrement sert \`a emp\^echer un tiers de lire un message s'il ne lui est pas address\'e.
 Pour assurer l'int\'egrit\'e d'un message, nous devons d\'esormais passer par la signature.
 
 
@@ -44,7 +44,7 @@ Par contre, l'arborescence des fichiers est devenue quelque peu complexe.
 Nous traiterons des d\'etails de cette arborescence dans le dernier chapitre.
 
 \section{Pr\'eparations avant ex\'ecution}
-Pour une execution dans accrocs des differents scripts, il faut que l'entit\'e ``banque'' existe avec ses differents fichiers de persistence :
+Pour une execution sans accrocs des differents scripts, il faut que l'entit\'e ``banque'' existe avec ses differents fichiers de persistence :
 \begin{verbatim}
 mkdir banque
 sh GenererCles.sh 2048 banque
