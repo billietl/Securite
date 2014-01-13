@@ -1,0 +1,76 @@
+\documentclass[oneside,10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[francais]{layout}
+\usepackage[OT1]{fontenc}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+% Reglages du document
+\lstset{language=bash, frame=single, breaklines=true, basicstyle=\ttfamily, keywordstyle=\bfseries}
+\setlength{\hoffset}{-18pt}        
+\setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{9pt} % Marge gauche sur pages paires
+\setlength{\marginparwidth}{54pt} % Largeur de note dans la marge
+\setlength{\textwidth}{481pt} % Largeur de la zone de texte (17cm)
+\setlength{\voffset}{-18pt} % Bon pour DOS
+\setlength{\marginparsep}{7pt} % Séparation de la marge
+\setlength{\topmargin}{0pt} % Pas de marge en haut
+\setlength{\headheight}{13pt} % Haut de page
+\setlength{\headsep}{10pt} % Entre le haut de page et le texte
+\setlength{\footskip}{27pt} % Bas de page + séparation
+\setlength{\textheight}{708pt} % Hauteur de la zone de texte (25cm)
+
+\begin{document}
+
+% Page de couverture
+\title{Mise en place d'une Web Application Firewall}
+\author{Louis BILLIET \\ Florent DAVID}
+\date{10 Décembre 2013}
+\maketitle
+
+\section{La faille mise en place}
+Pour illustrer le fonctionnement d'un Web Application Firewall, nous avons ouvert une faille SQL.
+Nous ne nous sommes pas cassés la t\^ete pour y arriver : nous avons repris votre site \`a auditer et comment\'e un appel \`a \verb+addslashes+ surle traitement du formulaire de connection.
+Ainsi, si on connais un identifiant de connection, on peut s'identifier dans utiliser de mot de passe.
+Si le login utilis\'e est \verb+billietl+, il suffit d'entrer dans le champ login \verb+billietl' or 'a'='a+ (ou quelque chose dans ce genre l\`a, il n'y a pas qu'une technique) et de laisser le champ mot de passe vide..
+
+\section{Le WAF utilis\'e}
+\'Etant donn\'e que l'application est motorisé sur un serveur apache, nous utilisons le module \verb+security2+.
+Vu le nombre de blogs sur internet qui en parle, il se peut que ce soit un module tr\`es efficace.
+Le seul probl\`eme que l'on a rencontr\'e est le fait qu'on utilise Archlinux.
+Le module y est disponible uniquement dans les d\'ep\^ots \verb+AUR+ (maintenu par les utilisateurs) et pas \`a jour.
+Nous avons donc du installer \`a la main \`a partir des sources.
+Ce qui n'\'etait pas insurmontable\ldots
+
+\section{Comment on a combl\'e la faille}
+Pour combler la faille, on pouvais voir deux angles d'attaque :
+\begin{itemize}
+\item d\'etecter et bloquer les mots-cl\'es SQL (select, update, insert, delete, from, and, or, \ldots).
+Si on taille bien la r\`egle mise en place pour v\'erifier les requ\^etes SQL sensibles, on peut prot\'eger l'application d'une grande majorit\'e de failles.
+Par contre, on risque fortement de bloquer des faux positifs (si on doit prot\'eger un forum par exemple, l'utilisation de certain des mots cl\'es de SQL est tout \`a fait l\'egitime).
+Cette solution n'est donc pas vraiment envisageable dans la plupart des situations.
+\item d\'etecter et patcher le caract\`ere \verb+'+.
+Cet angle d'attaque est d\'ej\`a plus respectueuse de l'utilisateur l\'egitime qui aura le droit d'utiliser son apostrophe pr\'ef\'er\'ee sans probl\`emes.
+On pourra aussi imaginer la m\^eme chose pour tous les meta-characters utilis\'e dans SQL.
+Mais cela ne concerne pas l'exploitation que l'on illustre.
+\end{itemize}
+
+
+Cependant, par manque de comp\'etences en lecture de documentation, la r\`egle mise en place bloque simplement les requ\^etes contenant le caract\`ere \verb+'+ (dans sa version urlEncodé).
+La r\`egle ressemble donc \`a : \\
+\verb+SecRule REQUEST_BODY ``%27'' ``id:2,sanitiseArg:passwd,deny,log,msg:'SQL Injection Detected'''+
+
+\section{Critiques}
+L'utilisation d'un WAF permet de corriger des failles applicatives tr\`es vite.
+Lorsqu'on la d\'etecte, il suffit d'ajouter une nouvelle r\`egle et de relancer le serveur pour combler la faille.
+Ainsi, le site est prot\'eg\'e en attendant un correctif.
+
+
+Cependant, maintenir une liste de r\`egle \'ecrite sur le volet peut devenir tr\`es vite fastidieux.
+De plus, savoir \'ecrire des r\`egles qui n'impactera pas les utilisateurs l\'egitimes est tout une science qu'il est difficile de ma\^itriser en cas d'urgence.
+L'utilisation syst\'ematique d'un WAF n'est donc pas, pour moi, une solution optimale sur le long terme, mais juste un outil permettant de palier \`a une urgence.
+
+\end{document}

@@ -1,0 +1,61 @@
+\documentclass[oneside,10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[francais]{layout}
+\usepackage[OT1]{fontenc}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+% Reglages du document
+\lstset{language=bash, frame=single, breaklines=true, basicstyle=\ttfamily, keywordstyle=\bfseries}
+\setlength{\hoffset}{-18pt}        
+\setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{9pt} % Marge gauche sur pages paires
+\setlength{\marginparwidth}{54pt} % Largeur de note dans la marge
+\setlength{\textwidth}{481pt} % Largeur de la zone de texte (17cm)
+\setlength{\voffset}{-18pt} % Bon pour DOS
+\setlength{\marginparsep}{7pt} % Séparation de la marge
+\setlength{\topmargin}{0pt} % Pas de marge en haut
+\setlength{\headheight}{13pt} % Haut de page
+\setlength{\headsep}{10pt} % Entre le haut de page et le texte
+\setlength{\footskip}{27pt} % Bas de page + séparation
+\setlength{\textheight}{708pt} % Hauteur de la zone de texte (25cm)
+
+\begin{document}
+
+% Page de couverture
+\title{Tracking des ``anonymes''}
+\author{Louis BILLIET \\ Florent DAVID}
+\date{8 Janvier 2013}
+\maketitle
+
+\section{Strat\'egie de tra\c cage}
+Notre page de tracking consiste uniquement en une page php.
+Selon la requ\^ete, on traite la (d\'e)connexion o\`u on affiche juste le nom de la personne que l'on a reconnu.
+Nous reconnaissons les personnes selon 6 crit\`eres :
+\begin{itemize}
+\item cookies
+\item user\_agent
+\item adresse du client
+\item adresse du proxy (s'il y en a)
+\item adresse proxifi\'ee (s'il y en a)
+\item contr\^ole de cache
+\end{itemize}
+Mis \`a part les cookies, nous enregistrons les diff\'erentes informations en base SQL avec le pseudo renseign\'e lors de l'enregistrement.
+Lors de la d\'econnexion, nous cherchons en base le pseudo qui correspond le mieux au profil de la personne qui visite.
+
+\section{Strat\'egie d'anonymisation}
+Pour nous anonymiser, nous controns principalement les points qu'on exploite :
+\begin{itemize}
+\item Concernant les cookies : nous les supprimons apr\`es d\'econnexion.
+\item Concernant le user-agent : nous utilisons \verb+modify headers+, un plugin pour firefox qui modifie \`a la vol\'ee les headers envoy\'es par firefox.
+N'est-il pas classe d'utiliser un minitel overclock\'e pour naviger sur internet ?
+\item Concernant l'adresse ip : on passe par un web-proxy gratuit (http://www.free\_proxy.fr par exemple).
+Plus efficace aurait \'et\'e l'utilisation de TOR, mais c'est d'un autre niveau.
+\end{itemize}
+Pour aller plus loin, on aurait pu utiliser \verb+no-script+, un plugin pour firefox qui bloque les scripts selon une whitelist.
+Mais il parait qu'on avait pas le droit\ldots
+
+\end{document}

@@ -1,0 +1,65 @@
+\documentclass[oneside,10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[francais]{layout}
+\usepackage[OT1]{fontenc}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+% Reglages du document
+\lstset{language=bash, frame=single, breaklines=true, basicstyle=\ttfamily, keywordstyle=\bfseries}
+\setlength{\hoffset}{-18pt}        
+\setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{9pt} % Marge gauche sur pages paires
+\setlength{\marginparwidth}{54pt} % Largeur de note dans la marge
+\setlength{\textwidth}{481pt} % Largeur de la zone de texte (17cm)
+\setlength{\voffset}{-18pt} % Bon pour DOS
+\setlength{\marginparsep}{7pt} % Séparation de la marge
+\setlength{\topmargin}{0pt} % Pas de marge en haut
+\setlength{\headheight}{13pt} % Haut de page
+\setlength{\headsep}{10pt} % Entre le haut de page et le texte
+\setlength{\footskip}{27pt} % Bas de page + séparation
+\setlength{\textheight}{708pt} % Hauteur de la zone de texte (25cm)
+
+\begin{document}
+
+% Page de couverture
+\title{Compte rendu de TP}
+\author{Louis BILLIET}
+\date{26 Nov. 2013}
+\maketitle
+
+\section{D\'efi 1}
+\subsection{Challenge 1}
+Le mot de passe demand\'e est affich\'e en clair dans le code source. Il suffit de regarder dans le code compil\'e avec un \'editeur hexad\'ecimal pour voir que le mot de passe est ``jump''.
+
+\subsection{Challenge 2}
+Le mot de passe est, cette fois-ci, hash\'e.
+Vu qu'on \`a autant d'essais que l'on veut, on peut brute-forcer comme un d\'ebile.
+Par contre, si on regarde le code source, on voit que le hach\'e fais 5 caract\`eres et que la m\'ethode de hachage ne modifie pas la longueur du mot de passe.
+On peut donc brute-forcer tout de suite avec un mot de passe de 5 caract\`eres.
+Apr\`es, si on triche jusqu'au bout et qu'on \'etudie la fonction de hachage, on voit que cette derni\`ere permet le calcul de pr\'e-images.
+Il suffit donc de faire marcher la machine \`a l'envers pour avoir le mot de passe \`a partir du hach\'e.
+
+\section{D\'efi 2}
+Ce programme demande un fichier \`a afficher et l'affiche \`a l'\'ecran\ldots
+via un execl qui appelle \verb+sh -c+.
+Ce qui n'est pas judicieux \'etant donn\'e que l'on peut injecter n'importe quoi derri\`ere le nom du fichier.
+On demande \`a afficher \verb+main.c&&sh+ et\ldots
+Ho! Le joli shell en root !
+
+\section{D\'efi 3}
+\subsection{Challenge 1}
+D'embl\'ee, compiler le code source nous renvoie un joli message d'avertissement disant que \verb+gets+ est d\'epr\'eci\'e.
+Mais l\`a n'est pas la faille que j'ai exploit\'e.
+L'utilisation de printf sans chaine de formatage permet de faire des trucs funkys.
+Un \verb+%s+ disparait du bonjour, un \verb+%n+ nous donne un joli segfault, un \verb+%m+ nous gratifie d'un success, un \verb+%p+ nous donne 0x400730 et plusieurs \verb+%p+ nous permet de remonter dans la stack.
+
+\subsection{Challenge 2}
+Ici, on a droit a un joli programme qui nous permet de faire un buffer overflow.
+Appeler\\ ./defi2 1234567890123456789012345678901234567890 donne une illegal instruction.
+Maintenant qu'on sais o\`u il faut exploiter le stack overflow, il nous reste \`a trouver l'adresse de la fonction \`a executer.
+
+\end{document}
