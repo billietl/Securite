@@ -33,29 +33,34 @@
 
 \section{Comment cr\'eer un admin ?}
 Lorsqu'on suis le lien \verb+http://localhost/?page=create_user+, et qu'on observe le code de la page, on peut voir un champ cach\'e ``status'' dont la valeur est \`a 1.
-Cette valeur peut être modifi\'e via le "DOM and style inpector" de firefox. 
-On vois sur dans le code source de la page \verb+http://localhost/?page=membres+ que 1 correspond \`a un visiteur, 2 \`a un \'etudiant et 3 \`a un enseignant.
+Cette valeur peut \^etre modifi\'e via le "DOM and style inpector" de firefox.
+On voit dans le code source de la page \verb+http://localhost/?page=membres+ que 1 correspond \`a un visiteur, 2 \`a un \'etudiant et 3 \`a un enseignant.
 On peut donc cr\'eer ais\'ement un nouvel utilisateur avec le status voulu afin d'en avoir les privil\`eges.
 
 Que se passe-t-il si on forge une requ\^ete avec ce champ \'egal \`a 4? Ou bien \`a 0 ?
 
-Un d\'etail nous frappe (aie!) lorsque l'on cr\'eer un utilisateur avec un status non \'existant. A la requ\`ete \verb+http://localhost/?page=membres&status=42+ 
+Un d\'etail nous frappe (aie!) lorsque l'on cr\'ee un utilisateur avec un status non ``out of bounds''. A la requ\`ete \verb+http://localhost/?page=membres&status=42+ 
 \\l'interface affiche une \'erreur \verb+Notice: Undefined offset: 42 in /srv/http/modules/membres.php on line 30+.
-Serait-ce une piste vers une autre faille? 
+Serait-ce une piste vers une autre faille?
 
 \section{G\'en\'eration d'images pour ``prot\'eger'' l'adresse mail des gens ?}
 Lorsqu'on suis le lien \verb+http://localhost/?page=membres+, les adresses mails sont des images... vers un script php, avec un paramettre pass\'e dans l'URL.
 Chez moi, l'image g\'en\'er\'ee est blanche, quoi que je fasse. Bug ?
+Toujours est-il que l'adresse e-mail est facilement lisible dans le code source de la page, ce qui n'emp\^echera pas un bot bien programm\'e de les r\'ecolter.
 
 \section{Exploration !}
 Toutes les images statiques sont stock\'ees dans le r\'epertoire \verb+static+.
-Si on le consulte via le navigateur, on peut voir plein de fichiers dont... ``login.html'' ???
+Si on le consulte via le navigateur, on peut voir plein de fichiers dont\ldots ``login.html'' ???
 
-M\^eme remarque pour \verb+http://192.168.12.94/modules/+, on retrouve dedans l'emssemble des fichiers php qui doivent \^etre utilis\'es sur le site.  
+M\^eme remarque pour \verb+http://192.168.12.94/modules/+, on y retrouve l'ensemble des fichiers php qui doivent \^etre utilis\'es sur le site.
+
+Le meilleur, c'est qu'on puisse y naviger sans encombreset donc voir tous les rouages du site.
 
 \section{XSS en force !}
 Gr\^ace au formulaire d'inscription, on peut injecter une balise \verb+script+ avec du code.
-Si on r\'eussis \`a faire un \verb+alert("test");+, on peut tr\`es bien, par exemple, r\'ecup\'erer les sessions des autres utilisateurs...
+Et ce, sans aucun encombres.
+Suffit de la glisser dans le champ nom.
+Si on r\'eussis \`a faire un \verb+alert("test");+, on peut tr\`es bien, par exemple, r\'ecup\'erer les sessions des autres utilisateurs\ldots
 
 \section{Fichier suspicieux}
 On a trouv\'e \verb+db.php+, que contient-il ?
