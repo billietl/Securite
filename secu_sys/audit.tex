@@ -33,31 +33,42 @@
 
 \section{Cr\'eation de comptes privil\'eg\'es}
 \subsection{O\`u est la faille}
-\subsection{Consequences}
-\subsection{Comment colmater la faille}
-Lorsqu'on suis le lien \verb+http://localhost/?page=create_user+, et qu'on observe le code de la page, on peut voir un champ cach\'e ``status'' dont la valeur est \`a 1.
-Cette valeur peut \^etre modifi\'e via le "DOM and style inpector" de firefox.
-On voit dans le code source de la page \verb+http://localhost/?page=membres+ que 1 correspond \`a un visiteur, 2 \`a un \'etudiant et 3 \`a un enseignant.
-On peut donc cr\'eer ais\'ement un nouvel utilisateur avec le status voulu afin d'en avoir les privil\`eges.
+La page de \verb+create_user+ permet de cr\'eer un utilisateur, bien entendu.
+Par contre, les privil\`eges accord\'es au nouvel utilisateur sont sp\'ecifi\'es dans un champ cach\'e du formulaire (nomm\'e \verb+status+).
+Le probl\`eme est que ce champ n'est pas v\'erifi\'ee co\'e serveur lors de la cr\'eation de l'utilisateur.
 
-Que se passe-t-il si on forge une requ\^ete avec ce champ \'egal \`a 4? Ou bien \`a 0 ?
+\subsection{Cons\'equences}
+\'Etant donn\'e que le champ \verb+status+ n'est soumis \`a aucun contr\^ole, un utilisateur malicieux peut tr\`es bien forger une requ\^ete avec un champ \verb+status+ modifi\'e.
+D'autant plus que pour y parvenir, il lui suffira de modifier le code source de la page (tous les navigateurs performants proposent ce genre d'option de base) puis de s'inscrire.
+Enfin, pour savoir quelle valeur utiliser, il lui suffira de regarder en d\'etails la page \verb+membres+.
+Il verra tr\`es vite quelle valeur utiliser pour cr\'eer un nouveau compte enseignant.
 
-Un d\'etail nous frappe (aie!) lorsque l'on cr\'ee un utilisateur avec un status non ``out of bounds''.
-A la requ\`ete \verb+http://localhost/?page=membres&status=42+ l'interface affiche une erreur \\ \verb+Notice: Undefined offset: 42 in /srv/http/modules/membres.php on line 30+.
-Serait-ce une piste vers une autre faille?
+\subsection{Recommandations pour colmater la faille}
+Pour corriger ce probl\`eme, il faut que les droits accord\'es ne soient pas communiqu\'e avec les informations servant \`a ouvrir un nouveau compte.
+Comprenez : n'utilisez pas de champs hidden pour \c ca.
+
+
+Nous pr\'econisons une cr\'eation par d\'efaut de comptes sans privil\`eges et de cr\'eer une page d'administration pour pouvoir \'elever les droits d'un utilisateur.
+
+\subsection{Sympt\^omes suppl\'ementaires}
+Sur la page \verb+membres+, il est possible de faire un tri selon les droits des membres (invit\'es, \'etudiants, enseignants).
+Ce tri se fait via un param\`etre pass\'e dans l'adresse de la page.
+Il n'y a donc aucune difficult\'e \`a la changer pour une valeur qui ne correspond \`a rien.
+Si on utilise la valeur 42, par exemple, la page nous affiche \verb+Notice: Undefined offset: 42 in /srv/http/modules/membres.php on line 30+.
+Cette erreur de programmation permet une fuite d'informations qui fait tache dans l'interface.
 
 \section{Protection anti-bot tr\`es peu efficace}
 \subsection{O\`u est la faille}
-\subsection{Consequences}
-\subsection{Comment colmater la faille}
+\subsection{Cons\'equences}
+\subsection{Recommandations pour colmater la faille}
 Lorsqu'on suis le lien \verb+http://localhost/?page=membres+, les adresses mails sont des images... vers un script php, avec un paramettre pass\'e dans l'URL.
 Chez moi, l'image g\'en\'er\'ee est blanche, quoi que je fasse. Bug ?
 Toujours est-il que l'adresse e-mail est facilement lisible dans le code source de la page, ce qui n'emp\^echera pas un bot bien programm\'e de les r\'ecolter.
 
 \section{Fuites d'informations}
 \subsection{O\`u est la faille}
-\subsection{Consequences}
-\subsection{Comment colmater la faille}
+\subsection{Cons\'equences}
+\subsection{Recommandations pour colmater la faille}
 Toutes les images statiques sont stock\'ees dans le r\'epertoire \verb+static+.
 Si on le consulte via le navigateur, on peut voir plein de fichiers dont\ldots ``login.html'' ???
 
@@ -71,8 +82,8 @@ Serait-ce un script contenant les informations de connection ?
 
 \section{Execution de javascripts provenants des utilisateurs}
 \subsection{O\`u est la faille}
-\subsection{Consequences}
-\subsection{Comment colmater la faille}
+\subsection{Cons\'equences}
+\subsection{Recommandations pour colmater la faille}
 Gr\^ace au formulaire d'inscription, on peut injecter une balise \verb+script+ avec du code.
 Et ce, sans aucun encombres.
 Suffit de la glisser dans le champ nom.
