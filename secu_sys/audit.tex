@@ -26,9 +26,9 @@
 \begin{document}
 
 % Page de couverture
-\title{Audit d'une passoire}
+\title{Audit d'un site web}
 \author{Louis BILLIET \\ Florent DAVID}
-\date{8 Janvier 2013}
+\date{17 Janvier 2013}
 \maketitle
 
 \section{Cr\'eation de comptes privil\'eg\'es}
@@ -59,34 +59,51 @@ Cette erreur de programmation permet une fuite d'informations qui fait tache dan
 
 \section{Protection anti-bot tr\`es peu efficace}
 \subsection{O\`u est la faille}
+Lors de son inscription, il est demand\'e a chaque utilisateur de fournir une adresse e-mail.
+Ces adresses sont visibles sur la page \verb+membres+ et, bien entendu, il s'agit d'images.
+Ainsi, un bot ne sera pas en mesure de les r\'ecup\'erer.
+Cependant, ces images sont g\'en\'er\'es \`a la vol\'ee via \verb+image.php+.
+De plus, le texte a afficher dans l'image est pass\'e en param\`etre dans l'URL.
+
 \subsection{Cons\'equences}
+La principale cons\'equence est que l'adresse e-mail que l'on veut cacher est en fait lisible dans le code source de la page.
+Certes, l'adresse n'est pas lisible directement, mais un rapide coup d'\oe il permettra \`a l'int\'eress\'e d'exploiter cette ressource.
+
 \subsection{Recommandations pour colmater la faille}
-Lorsqu'on suis le lien \verb+http://localhost/?page=membres+, les adresses mails sont des images... vers un script php, avec un paramettre pass\'e dans l'URL.
-Chez moi, l'image g\'en\'er\'ee est blanche, quoi que je fasse. Bug ?
-Toujours est-il que l'adresse e-mail est facilement lisible dans le code source de la page, ce qui n'emp\^echera pas un bot bien programm\'e de les r\'ecolter.
-
-\section{Fuites d'informations}
-\subsection{O\`u est la faille}
-\subsection{Cons\'equences}
-\subsection{Recommandations pour colmater la faille}
-Toutes les images statiques sont stock\'ees dans le r\'epertoire \verb+static+.
-Si on le consulte via le navigateur, on peut voir plein de fichiers dont\ldots ``login.html'' ???
-
-M\^eme remarque pour \verb+http://192.168.12.94/modules/+, on y retrouve l'ensemble des fichiers php qui doivent \^etre utilis\'es sur le site.
-
-Le meilleur, c'est qu'on puisse y naviger sans encombreset donc voir tous les rouages du site.
-
-On a trouv\'e \verb+db.php+, que contient-il ?
-\`A quoi sert-il ?
-Serait-ce un script contenant les informations de connection ?
+La solution la plus simple serait de proposer un lien vers l'image qui se sers d'une autre information que l'adresse e-mail (l'identifiant de l'utilisateur, par exemple).
+Ainsi, les bots ne pourront pas d\'eduire l'adresse e-mail de chaque utilisateur \`a partr du code source de la page.
 
 \section{Execution de javascripts provenants des utilisateurs}
 \subsection{O\`u est la faille}
+Cette faille se partagent entre les pages \verb+create_user+ et \verb+membre+.
+Lorsqu'un utilisateur cr\'ee un compte, il lui est possible d'inclure dans le champs \verb+nom+ une balise HTML contenant du code javascript.
+Ce code sera ensuite execut\'e partout o\`u sera affich\'e le nom de l'utilisateur.
+
 \subsection{Cons\'equences}
+Le v\'eritable probl\`eme ici n'est pas tant le site internet en lui m\^eme mais celui des donn\'ees personelles des utilisateurs.
+En effet, la technologie javascript permet d'acc\'eder aux cookies de l'utilisateur.
+Un pirate n'aura donc aucun mal \`a mettre en place un morceaux de code javascript r\'ecoltant les sessions des utilisateurs.
+S'il s'y prends assez vite, il lui sera alors possible de voler le compte d'un utilisateur avant qu'il ne s'en rende compte.
+
 \subsection{Recommandations pour colmater la faille}
-Gr\^ace au formulaire d'inscription, on peut injecter une balise \verb+script+ avec du code.
-Et ce, sans aucun encombres.
-Suffit de la glisser dans le champ nom.
-Si on r\'eussis \`a faire un \verb+alert("test");+, on peut tr\`es bien, par exemple, r\'ecup\'erer les sessions des autres utilisateurs\ldots
+La meileure façon de se prot\'eger de ce genre de faille est d'utiliser la fonction \verb+htmlspecialchars+.
+Elle remplace certains caract\`eres pour emp\^echer l'utilisateur d'\'ecrire quoi que ce soit d'interpr\'etable par les navigateurs.
+
+\section{Fuites d'informations diverses}
+\subsection{O\`u est la faille}
+En fouillant un peu, on peut voir quelques dossiers qui ne sont pas sens\'es \^etres expos\'es \`a la vue de tous.
+Comprenez, nous pouvons naviguer \`a travers les rouages du site sans encombres gr\^ace a \verb+localhost/static+ et \verb+localhost/modules+.
+Ce qui est un peu d\'erangeant\ldots
+
+\subsection{Cons\'equences}
+La cons\'equence \`a cela est qu'une personne un peu fouineuse peut analyser le fonctionnement du site.
+La fuite d'informations est la principale source d'informations pour les pirates.
+
+\subsection{Recommandations pour colmater la faille}
+Si le site est d\'eploy\'e sur apache, l'utilisation d'un fichier \verb+.htaccess+ devrais suffire a colmater cette faille.
+
+\subsection{Sympt\^omes suppl\'ementaires}
+Il existe un fichier \verb+db.php+ qui n'affiche rien d'utile pour un utilisateur lambda.
+D\'eplacer ce fichier dans le dossier \verb+modules+ me semble une bonne id\'ee.
 
 \end{document}
