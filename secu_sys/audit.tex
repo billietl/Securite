@@ -35,17 +35,17 @@
 \subsection{O\`u est la faille}
 La page de \verb+create_user+ permet de cr\'eer un utilisateur, bien entendu.
 Par contre, les privil\`eges accord\'es au nouvel utilisateur sont sp\'ecifi\'es dans un champ cach\'e du formulaire (nomm\'e \verb+status+).
-Le probl\`eme est que ce champ n'est pas v\'erifi\'ee co\'e serveur lors de la cr\'eation de l'utilisateur.
+Le probl\`eme est que ce champ n'est pas v\'erifi\'ee cot\'e serveur lors de la cr\'eation de l'utilisateur.
 
 \subsection{Cons\'equences}
 \'Etant donn\'e que le champ \verb+status+ n'est soumis \`a aucun contr\^ole, un utilisateur malicieux peut tr\`es bien forger une requ\^ete avec un champ \verb+status+ modifi\'e.
-D'autant plus que pour y parvenir, il lui suffira de modifier le code source de la page (tous les navigateurs performants proposent ce genre d'option de base) puis de s'inscrire.
+D'autant plus que pour y parvenir, il lui suffira de modifier le code source de la page (tous les navigateurs performants proposent ce genre d'outils de base) puis de s'inscrire.
 Enfin, pour savoir quelle valeur utiliser, il lui suffira de regarder en d\'etails la page \verb+membres+.
 Il verra tr\`es vite quelle valeur utiliser pour cr\'eer un nouveau compte enseignant.
 
 \subsection{Recommandations pour colmater la faille}
 Pour corriger ce probl\`eme, il faut que les droits accord\'es ne soient pas communiqu\'e avec les informations servant \`a ouvrir un nouveau compte.
-Comprenez : n'utilisez pas de champs hidden pour \c ca.
+Comprenez : n'utilisez pas de champs cach\'es pour \c ca.
 
 
 Nous pr\'econisons une cr\'eation par d\'efaut de comptes sans privil\`eges et de cr\'eer une page d'administration pour pouvoir \'elever les droits d'un utilisateur.
@@ -55,22 +55,23 @@ Sur la page \verb+membres+, il est possible de faire un tri selon les droits des
 Ce tri se fait via un param\`etre pass\'e dans l'adresse de la page.
 Il n'y a donc aucune difficult\'e \`a la changer pour une valeur qui ne correspond \`a rien.
 Si on utilise la valeur 42, par exemple, la page nous affiche \verb+Notice: Undefined offset: 42 in /srv/http/modules/membres.php on line 30+.
-Cette erreur de programmation permet une fuite d'informations qui fait tache dans l'interface.
+Cette erreur de programmation permet une fuite d'informations qui, de plus, fait tache dans l'interface.
 
 \section{Protection anti-bot tr\`es peu efficace}
 \subsection{O\`u est la faille}
-Lors de son inscription, il est demand\'e a chaque utilisateur de fournir une adresse e-mail.
-Ces adresses sont visibles sur la page \verb+membres+ et, bien entendu, il s'agit d'images.
+Lors de son inscription, il est demand\'e \`a chaque utilisateur de fournir une adresse e-mail.
+Ces adresses sont visibles sur la page \verb+membres+ et, bien entendu, s\'ecurit\'e oblige, il s'agit d'images.
 Ainsi, un bot ne sera pas en mesure de les r\'ecup\'erer.
+A priori.
 Cependant, ces images sont g\'en\'er\'es \`a la vol\'ee via \verb+image.php+.
-De plus, le texte a afficher dans l'image est pass\'e en param\`etre dans l'URL.
+De plus, le texte \`a afficher dans l'image est pass\'e en param\`etre dans l'URL.
 
 \subsection{Cons\'equences}
 La principale cons\'equence est que l'adresse e-mail que l'on veut cacher est en fait lisible dans le code source de la page.
-Certes, l'adresse n'est pas lisible directement, mais un rapide coup d'\oe il permettra \`a l'int\'eress\'e d'exploiter cette ressource.
+Certes, l'adresse n'est pas lisible directement, mais un rapide coup d'\oe il permettra \`a l'int\'eress\'e de savoir comment exploiter cette ressource.
 
 \subsection{Recommandations pour colmater la faille}
-La solution la plus simple serait de proposer un lien vers l'image qui se sers d'une autre information que l'adresse e-mail (l'identifiant de l'utilisateur, par exemple).
+La solution la plus simple serait de proposer un lien qui se sers d'une autre information que l'adresse e-mail pour faire la distinction (l'identifiant de l'utilisateur, par exemple).
 Ainsi, les bots ne pourront pas d\'eduire l'adresse e-mail de chaque utilisateur \`a partr du code source de la page.
 
 \section{Execution de javascripts provenants des utilisateurs}
@@ -83,27 +84,30 @@ Ce code sera ensuite execut\'e partout o\`u sera affich\'e le nom de l'utilisate
 Le v\'eritable probl\`eme ici n'est pas tant le site internet en lui m\^eme mais celui des donn\'ees personelles des utilisateurs.
 En effet, la technologie javascript permet d'acc\'eder aux cookies de l'utilisateur.
 Un pirate n'aura donc aucun mal \`a mettre en place un morceaux de code javascript r\'ecoltant les sessions des utilisateurs.
-S'il s'y prends assez vite, il lui sera alors possible de voler le compte d'un utilisateur avant qu'il ne s'en rende compte.
+S'il s'y prends dans les temps, il lui sera alors possible de voler le compte d'un utilisateur avant qu'il ne s'en rende compte.
 
 \subsection{Recommandations pour colmater la faille}
-La meileure façon de se prot\'eger de ce genre de faille est d'utiliser la fonction \verb+htmlspecialchars+.
+La meileure façon de se prot\'eger de ce genre de faille est d'utiliser la fonction \verb+htmlspecialchars+, incluse de base dans PHP.
 Elle remplace certains caract\`eres pour emp\^echer l'utilisateur d'\'ecrire quoi que ce soit d'interpr\'etable par les navigateurs.
 
 \section{Fuites d'informations diverses}
 \subsection{O\`u est la faille}
 En fouillant un peu, on peut voir quelques dossiers qui ne sont pas sens\'es \^etres expos\'es \`a la vue de tous.
-Comprenez, nous pouvons naviguer \`a travers les rouages du site sans encombres gr\^ace a \verb+localhost/static+ et \verb+localhost/modules+.
+Comprenez, nous pouvons naviguer \`a travers les rouages du site sans encombres gr\^ace \`a \verb+localhost/static+ et \verb+localhost/modules+.
 Ce qui est un peu d\'erangeant\ldots
 
 \subsection{Cons\'equences}
 La cons\'equence \`a cela est qu'une personne un peu fouineuse peut analyser le fonctionnement du site.
 La fuite d'informations est la principale source d'informations pour les pirates.
 
+De plus, il n'est pas dit qu'executer les scripts contenus dans \verb+localhost/modules+ ne ruinent pas le site.
+
 \subsection{Recommandations pour colmater la faille}
-Si le site est d\'eploy\'e sur apache, l'utilisation d'un fichier \verb+.htaccess+ devrais suffire a colmater cette faille.
+Si le site est d\'eploy\'e sur \verb+Apache+, l'utilisation d'un fichier \verb+.htaccess+ devrais suffire pour colmater cette faille.
+Sinon, \verb+nginx+ resteint par d\'efaut la navigation dans les dossiers \verb+static+ et \verb+modules+.
 
 \subsection{Sympt\^omes suppl\'ementaires}
 Il existe un fichier \verb+db.php+ qui n'affiche rien d'utile pour un utilisateur lambda.
-D\'eplacer ce fichier dans le dossier \verb+modules+ me semble une bonne id\'ee.
+D\'eplacer ce fichier dans le dossier \verb+modules+ me semble une bonne id\'ee pour \'eviter une fuite suppl\'ementaire.
 
 \end{document}
