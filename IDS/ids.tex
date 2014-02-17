@@ -1,0 +1,62 @@
+\documentclass[oneside,10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[francais]{layout}
+\usepackage[OT1]{fontenc}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+% Reglages du document
+\lstset{language=bash, frame=single, breaklines=true, basicstyle=\ttfamily, keywordstyle=\bfseries}
+\setlength{\hoffset}{-18pt}        
+\setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{9pt} % Marge gauche sur pages paires
+\setlength{\marginparwidth}{54pt} % Largeur de note dans la marge
+\setlength{\textwidth}{481pt} % Largeur de la zone de texte (17cm)
+\setlength{\voffset}{-18pt} % Bon pour DOS
+\setlength{\marginparsep}{7pt} % Séparation de la marge
+\setlength{\topmargin}{0pt} % Pas de marge en haut
+\setlength{\headheight}{13pt} % Haut de page
+\setlength{\headsep}{10pt} % Entre le haut de page et le texte
+\setlength{\footskip}{27pt} % Bas de page + séparation
+\setlength{\textheight}{708pt} % Hauteur de la zone de texte (25cm)
+
+\begin{document}
+
+% Page de couverture
+\title{Mise en place et contournement d'un IDS}
+\author{Louis BILLIET}
+\date{17 f\'evrier 2014}
+\maketitle
+
+\section{Mise en place}
+\subsection{Service faible}
+Le service attaqu\'e est un service web volontairement trou\'e de partout heberg\'e sur un LAMP \`a jour (le 16 f\'evrier 2014).
+
+\subsection{IDS}
+L'IDS est install\'e sur le m\^eme serveur qui heberge le service.
+C'est moins s\'ecuris\'e mais pour les besoins du TP, \c ca suffira
+\begin{itemize}
+\item OS : Ubuntu 13.10 32 bits
+\item IDS : Snort version 2.9.2.2
+\item R\`egles : https://rules.emergingthreats.net/open/snort-2.9.2/rules/.
+Mises \`a jour des r\`egles automatiquement via oinkmaster.
+\end{itemize}
+
+\section{Attaque envisag\'ee}
+La page d'inscription est faible face aux attaques XSS.
+Ins\'erer un script qui redirige automatiquement vers une autre page peut rendre indisponibles certaines pages.
+
+\section{Ce que j'ai modifi\'e dans l'espoir de me faire d\'etecter}
+\subsection{V\'erification des r\`egles}
+\subsection{V\'erification du preprocesseur HTTP}
+\subsection{V\'erification de la d\'etection du trafic}
+
+\section{Techniques d'\'evasion envisag\'ees}
+\subsection{Modification de l'encodage}
+\subsection{Fragmentation des paquets}
+\subsection{Ajout d'espaces}
+
+\end{document}
