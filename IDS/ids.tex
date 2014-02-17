@@ -51,12 +51,31 @@ Ins\'erer un script qui redirige automatiquement vers une autre page peut rendre
 
 \section{Ce que j'ai modifi\'e dans l'espoir de me faire d\'etecter}
 \subsection{V\'erification des r\`egles}
-\subsection{V\'erification du preprocesseur HTTP}
+Apr\`es avoir mis en place les r\`egles d'emergingthreats, aucune attaque n'\'etait d\'etect\'ee.
+J'ai donc \'ecrit une r\`egle en m'inspirant de ce qui est \'ecrit sur cette page : http://www.symantec.com/connect/articles/detection-sql-injection-and-cross-site-scripting-attacks (section 3 ``Regular Expressions for Cross Site Scripting (CSS)'').
+Cette r\`egle ne levant toujours aucune alarme, j'ai donc \'ecrit une r\`egle qui l\`eve une alarme au moindre trafic sur le port 80 de mon serveur.
+Vu que m\^eme dans cette situation, aucune alerte n'\'etait lev\'ee, j'ai remis en cause la configuration de snort.
+
+\subsection{V\'erification de la configuration de snort}
+J'ai v\'erifi\'e la plage d'adresse surveill\'ee, les ports surveill\'es, le profil du preprocesseur HTTP et la liste des r\`egles import\'ees.
+Il n'y a rien, de mon point de vue, qui soit mal configur\'e.
+
 \subsection{V\'erification de la d\'etection du trafic}
+\'Etant donn\'e 
 
 \section{Techniques d'\'evasion envisag\'ees}
 \subsection{Modification de l'encodage}
 \subsection{Fragmentation des paquets}
 \subsection{Ajout d'espaces}
+
+\section{Bibliographie}
+\begin{itemize}
+\item Regex pour d\'etecter les attaques XSS :\\
+http://www.symantec.com/connect/articles/detection-sql-injection-and-cross-site-scripting-attacks
+\item Documentation de snort \`a propos des r\`egles :\\
+http://manual.snort.org/node27.html
+\item Documentation de snort \`a propos des pr\'eprocesseurs :\\
+http://manual.snort.org/node17.html
+\end{itemize}
 
 \end{document}
