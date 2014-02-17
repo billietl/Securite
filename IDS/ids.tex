@@ -53,20 +53,49 @@ Ins\'erer un script qui redirige automatiquement vers une autre page peut rendre
 \subsection{V\'erification des r\`egles}
 Apr\`es avoir mis en place les r\`egles d'emergingthreats, aucune attaque n'\'etait d\'etect\'ee.
 J'ai donc \'ecrit une r\`egle en m'inspirant de ce qui est \'ecrit sur cette page : http://www.symantec.com/connect/articles/detection-sql-injection-and-cross-site-scripting-attacks (section 3 ``Regular Expressions for Cross Site Scripting (CSS)'').
+La r\`egle donne :
+\begin{verbatim} alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"LOUIS XSS attaque (crade)";\end{verbatim}
+\begin{verbatim} pcre:"/((\%3C)|<)[^\n]+((\%3E)|>)/I"; classtype:Web-application-attack; sid:9000; rev:1;) \end{verbatim}
 Cette r\`egle ne levant toujours aucune alarme, j'ai donc \'ecrit une r\`egle qui l\`eve une alarme au moindre trafic sur le port 80 de mon serveur.
+Ce qui donne :
+\begin{verbatim}alert tcp any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"activite sur le port 80"; sid:9000;rev:1;)\end{verbatim}
 Vu que m\^eme dans cette situation, aucune alerte n'\'etait lev\'ee, j'ai remis en cause la configuration de snort.
 
 \subsection{V\'erification de la configuration de snort}
 J'ai v\'erifi\'e la plage d'adresse surveill\'ee, les ports surveill\'es, le profil du preprocesseur HTTP et la liste des r\`egles import\'ees.
 Il n'y a rien, de mon point de vue, qui soit mal configur\'e.
+Voici quand m\^eme ce que donne les parties concern\'ees par la conf :
+\begin{verbatim}
+ipvar HOME_NET 10.0.0.0/8
+ipvar EXTERNAL_NET any
+ipvar HTTP_SERVERS $HOME_NET
+
+portvar HTTP_PORTS [80, ...] # ligne ecourtee
+
+var RULE_PATH /etc/snort/rules
+
+preprocessor http_inspect: \
+    global iis_unicode_map unicode.map 1252 compress_depth 65535 decompress_depth 65535
+preprocessor http_inspect_server: \
+    server apache profile all ports { 80 }
+
+include $RULE_PATH/community-web-php.rules
+\end{verbatim}
+
 
 \subsection{V\'erification de la d\'etection du trafic}
-\'Etant donn\'e 
+\'Etant donn\'e qu'aucune r\`egle ne veut lever d'alertes, je me suis donc dit que snort ne voyait pas le trafic.
+Le fait que apache r\'eponde \`a mes requ\^etes prouve que le traffic est bien \'etablis.
+De plus, wareshark et tcpdump montrent clairement l'\'echange qui s'op\`ere entre le navigateur de l'attaquant et apache\ldots
 
 \section{Techniques d'\'evasion envisag\'ees}
 \subsection{Modification de l'encodage}
+En modifiant l'encodage des chevrons (utiliser \%3C au lieu de \textless, voire m\^eme repasser l'encodeur et envoyer \%253C), la regex s'occupant de d\'etecter la faille serait tromp\'ee.
 \subsection{Fragmentation des paquets}
+L'id\'ee est de modifier la taille du MTU de la carte r\'eseau (avec la commande ifconfig par exemple).
+En jouant avec la MTU, on peut exp\'erer sectionner la requ\^ete au bon endroit pour que les deux chevrons se trouvent dans deux paquets TCP s\'epar\'es.
 \subsection{Ajout d'espaces}
+Afin de faciliter le jeu avec la MTU, on peut ajouter des espaces dans les balises pour forcer la d\'ecoupe des balises qu'on injecte.
 
 \section{Bibliographie}
 \begin{itemize}
