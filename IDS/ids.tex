@@ -36,8 +36,8 @@
 Le service attaqu\'e est un service web volontairement trou\'e de partout heberg\'e sur un LAMP \`a jour (le 16 f\'evrier 2014).
 
 \subsection{IDS}
-L'IDS est install\'e sur le m\^eme serveur qui heberge le service.
-C'est moins s\'ecuris\'e mais pour les besoins du TP, \c ca suffira
+L'IDS est install\'e sur la machine vietuelle (virtualbox) qui h\'eberge le service.
+C'est moins s\'ecuris\'e qu'avoir deux machines dissoci\'ees, mais pour les besoins du TP, \c ca suffira.
 \begin{itemize}
 \item OS : Ubuntu 13.10 32 bits
 \item IDS : Snort version 2.9.2.2
@@ -46,12 +46,17 @@ Mises \`a jour des r\`egles automatiquement via oinkmaster.
 \end{itemize}
 
 \section{Attaque envisag\'ee}
-La page d'inscription est faible face aux attaques XSS.
-Ins\'erer un script qui redirige automatiquement vers une autre page peut rendre indisponibles certaines pages.
+Le champ ``nom'' de la page d'inscription est faible face aux attaques XSS.
+Les balises ins\'er\'ees seront ensuite visibles depuis toutes les pages affichant dynamiquement des noms.
+Ins\'erer un script qui redirige automatiquement vers une autre page peut rendre indisponibles ces pages, et ainsi initier un DoS partiel.
+
+
+Malheureusement, aucune attaque ne fut d\'etect\'ee.
+M\^eme les plus basiques\ldots
 
 \section{Ce que j'ai modifi\'e dans l'espoir de me faire d\'etecter}
 \subsection{V\'erification des r\`egles}
-Apr\`es avoir mis en place les r\`egles d'emergingthreats, aucune attaque n'\'etait d\'etect\'ee.
+\'Etant donn\'e que les r\`egles d'\verb+emergingthreats.net+ ne d\'etectaient pas mes attaques, je me suis dit que ces r\`egles \'etaient trop sp\'ecifiques.
 J'ai donc \'ecrit une r\`egle en m'inspirant de ce qui est \'ecrit sur cette page : http://www.symantec.com/connect/articles/detection-sql-injection-and-cross-site-scripting-attacks (section 3 ``Regular Expressions for Cross Site Scripting (CSS)'').
 La r\`egle donne :
 \begin{verbatim} alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"LOUIS XSS attaque (crade)";\end{verbatim}
@@ -64,7 +69,7 @@ Vu que m\^eme dans cette situation, aucune alerte n'\'etait lev\'ee, j'ai remis 
 \subsection{V\'erification de la configuration de snort}
 J'ai v\'erifi\'e la plage d'adresse surveill\'ee, les ports surveill\'es, le profil du preprocesseur HTTP et la liste des r\`egles import\'ees.
 Il n'y a rien, de mon point de vue, qui soit mal configur\'e.
-Voici quand m\^eme ce que donne les parties concern\'ees par la conf :
+Voici quand m\^eme les parties int\'eressantes du fichier de configuration.
 \begin{verbatim}
 ipvar HOME_NET 10.0.0.0/8
 ipvar EXTERNAL_NET any
